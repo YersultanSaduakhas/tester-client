@@ -1,0 +1,149 @@
+<template>
+  <v-card class="px-4">
+        <v-card-text>
+            <v-form ref="registerForm" v-model="valid" lazy-validation>
+                <v-row>
+                    <v-col cols="12" sm="6" md="6">
+                        <v-text-field
+                        v-model="firstName"
+                        :rules="[rules.required]"
+                        label="First Name"
+                        maxlength="20"
+                        required
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                        <v-text-field
+                        v-model="lastName"
+                        :rules="[rules.required]"
+                        label="Last Name"
+                        maxlength="20"
+                        required
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                        <v-text-field
+                        v-model="email"
+                        :rules="emailRules"
+                        label="E-mail"
+                        required></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                        <v-text-field
+                        v-model="password"
+                        :append-icon="show1 ?'mdi-eye' : 'mdi-eye-off'"
+                        :rules="[rules.required, rules.min]"
+                        :type="show1 ? 'text' : 'password'"
+                        name="input-10-1"
+                        label="Password"
+                        hint="At least 8 characters"
+                        counter
+                        @click:append="show1 = !show1"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                        <v-text-field
+                        block
+                        v-model="verify"
+                        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                        :rules="[rules.required, passwordMatch]"
+                        :type="show1 ? 'text' : 'password'"
+                        name="input-10-1"
+                        label="Confirm Password"
+                        counter
+                        @click:append="show1 = !show1"
+                        ></v-text-field>
+                    </v-col>
+                    <v-spacer></v-spacer>
+                    <v-alert
+                      v-if="alertError"
+                      border="top"
+                      color="red lighten-2"
+                      transition="slide-y-transition"
+                      dark
+                    >{{errorText}}</v-alert>
+                    <v-col class="d-flex ml-auto" cols="12" sm="3" xsm="12">
+                        <v-btn
+                        x-large
+                        block
+                        :disabled="!valid"
+                        color="success"
+                        @click="validate">Register</v-btn>
+                    </v-col>
+                </v-row>
+            </v-form>
+        </v-card-text>
+    </v-card>
+</template>
+<script>
+import axios from 'axios'
+export default {
+  data: () => ({
+    darkTheme: true,
+    platformName: 'Platform name',
+    password: null,
+    username: null,
+    valid: true,
+    firstName: '',
+    lastName: '',
+    email: '',
+    verify: '',
+    alertError: false,
+    errorText: '',
+    emailRules: [
+      v => !!v || 'Required',
+      v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+    ],
+    show1: false,
+    rules: {
+      required: value => !!value || 'Required.',
+      min: v => (v && v.length >= 8) || 'Min 8 characters'
+    }
+  }),
+  computed: {
+    passwordMatch () {
+      return () => this.password === this.verify || 'Password must match'
+    }
+  },
+  methods: {
+    async validate () {
+      if (this.$refs.registerForm.validate()) {
+        // submit form to server/API here...
+        // axios.post()
+        // await fetch('/api/register', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify({
+        //     name: this.firstName,
+        //     email: this.email,
+        //     password: this.password
+        //   })
+        // })
+        await axios.post('/api/register', {
+          name: this.firstName,
+          email: this.email,
+          password: this.password
+        }).then(function (response) {
+          this.$router.push('/login')
+          console.log(response)
+        }).catch(function (error) {
+          this.errorText = error
+          console.log(error)
+          this.alertError = true
+          window.setTimeout(() => {
+            this.alertError = false
+          }, 3000)
+        })
+      }
+    },
+    reset () {
+      this.$refs.form.reset()
+    },
+    resetValidation () {
+      this.$refs.form.resetValidation()
+    }
+  }
+}
+</script>
+<style>
+</style>
