@@ -47,7 +47,7 @@ export default {
   ],
   proxy: {
     // see Proxy section
-    '/api': { target: 'http://localhost:8000/api', pathRewrite: {'^/api': ''} }
+    '/api': { target: 'https://bilim.api.icatalog.kz/api', pathRewrite: {'^/api': ''} }
     
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
