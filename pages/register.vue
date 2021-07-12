@@ -7,7 +7,7 @@
                         <v-text-field
                         v-model="firstName"
                         :rules="[rules.required]"
-                        label="First Name"
+                        :label="$t('first_name')"
                         maxlength="20"
                         required
                         ></v-text-field>
@@ -16,7 +16,7 @@
                         <v-text-field
                         v-model="lastName"
                         :rules="[rules.required]"
-                        label="Last Name"
+                        :label="$t('last_name')"
                         maxlength="20"
                         required
                         ></v-text-field>
@@ -25,7 +25,7 @@
                         <v-text-field
                         v-model="email"
                         :rules="emailRules"
-                        label="E-mail"
+                        :label="$t('email')"
                         required></v-text-field>
                     </v-col>
                     <v-col cols="12">
@@ -35,7 +35,7 @@
                         :rules="[rules.required, rules.min]"
                         :type="show1 ? 'text' : 'password'"
                         name="input-10-1"
-                        label="Password"
+                        :label="$t('password')"
                         hint="At least 8 characters"
                         counter
                         @click:append="show1 = !show1"
@@ -49,7 +49,7 @@
                         :rules="[rules.required, passwordMatch]"
                         :type="show1 ? 'text' : 'password'"
                         name="input-10-1"
-                        label="Confirm Password"
+                        :label="$t('retype_password')"
                         counter
                         @click:append="show1 = !show1"
                         ></v-text-field>
@@ -68,7 +68,7 @@
                         block
                         :disabled="!valid"
                         color="success"
-                        @click="validate">Register</v-btn>
+                        @click="validate">{{ $t('register')  }}</v-btn>
                     </v-col>
                 </v-row>
             </v-form>
@@ -91,12 +91,12 @@ export default {
     alertError: false,
     errorText: '',
     emailRules: [
-      v => !!v || 'Required',
+      v => !!v || 'required',
       v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
     ],
     show1: false,
     rules: {
-      required: value => !!value || 'Required.',
+      required: value => !!value || 'required.',
       min: v => (v && v.length >= 8) || 'Min 8 characters'
     }
   }),

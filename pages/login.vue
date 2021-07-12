@@ -19,30 +19,32 @@
       </v-card-title> -->
       <v-divider></v-divider>
       <v-card-text>
-        <p>Sign in with your username and password:</p>
+        <p>{{ $t('login_info') }}:</p>
         <v-form>
           <v-text-field
             outline
-            label="Username"
+            :label="$t('email')"
             type="text"
             v-model="username"
+            required
           ></v-text-field>
           <v-text-field
             outline
             hide-details
-            label="Password"
+            :label="$t('password')"
             type="password"
             v-model="password"
+            required
           ></v-text-field>
         </v-form>
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions :class="{ 'pa-3': $vuetify.breakpoint.smAndUp }">
-        <v-btn color="info" flat> Forgot password? </v-btn>
+        <v-btn color="info" flat> {{ $t('forgot_password') }}? </v-btn>
         <v-spacer></v-spacer>
         <v-btn color="info" :large="$vuetify.breakpoint.smAndUp">
           <v-icon left>mdi-lock</v-icon>
-          Login
+          {{ $t('login') }}
         </v-btn>
       </v-card-actions>
     </v-card>
