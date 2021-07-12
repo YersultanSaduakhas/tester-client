@@ -1,4 +1,5 @@
 <template>
+<v-container>
 <v-card
     class="mx-auto"
   >
@@ -9,12 +10,12 @@
     </v-img>
 
     <v-card-subtitle class="pb-0">
-      Dal kazir
+      {{ $t('right_now') }}
     </v-card-subtitle>
 
     <v-card-text class="text--primary">
-      <div>Tirkeludi qajet etpeydi</div>
-      <!-- <div>Whitsunday Island, Whitsunday Islands</div> -->
+      <div>{{ $t('registration_not_necessary') }}</div>
+      <div>{{ $t('full_test') }}</div>
     </v-card-text>
 
     <v-card-actions>
@@ -23,7 +24,7 @@
         text
         to="choose_lessons"
       >
-        Testti bastau
+        {{ $t('start_a_test') }}
       </v-btn>
 
       <!-- <v-btn

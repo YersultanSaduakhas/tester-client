@@ -43,7 +43,26 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/proxy',
     // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    ['nuxt-i18n',{
+      // strategy: 'prefix_except_default',
+      locales: [
+        {
+          name: 'kz',
+          code: 'kz',
+          iso: 'kz-KZ',
+          file: 'kz.js'
+        },
+        {
+          name: 'ru',
+          code: 'ru',
+          iso: 'ru-RU',
+          file: 'ru.js'
+        },
+      ],
+      langDir: 'lang/',
+      defaultLocale: 'kz',
+    }]
   ],
   proxy: {
     // see Proxy section
@@ -96,5 +115,5 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+  } 
 }

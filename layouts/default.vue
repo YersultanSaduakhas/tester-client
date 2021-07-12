@@ -21,7 +21,7 @@
         <v-list-item
           v-for="(item, i) in items"
           :key="i"
-          :to="item.to"
+          :to="getLocalizedRoute(item.to)"
           router
           exact
         >
@@ -29,7 +29,7 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title v-text="$t(item.title)" />
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -42,8 +42,12 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title color="#d3008d">bilim.kz</v-toolbar-title>
       <v-spacer></v-spacer>
-      <button class="mr-3"><img src="img/flag_kazakhstan_24.png"></button>
-      <button><img src="img/flag_russia_24.png"></button>
+      <NuxtLink :to="switchLocalePath('kz')">
+        <img class="mr-3" src="img/flag_kazakhstan_24.png">
+      </NuxtLink>
+      <NuxtLink :to="switchLocalePath('ru')">
+        <img src="img/flag_russia_24.png">
+      </NuxtLink>
       <!-- <v-btn icon>
         <v-icon>mdi-export</v-icon>
       </v-btn> -->
@@ -72,22 +76,22 @@ export default {
       items: [
         {
           icon: 'mdi-apps',
-          title: 'test tapsyru',
+          title: 'start_a_test',
           to: '/'
         },
         {
           icon: 'mdi-login',
-          title: 'Kiru',
+          title: 'login',
           to: '/login'
         },
         {
           icon: 'mdi-account-plus',
-          title: 'Tirkelu',
+          title: 'register',
           to: '/register'
         },
         {
           icon: 'mdi-account-arrow-left',
-          title: 'Profil',
+          title: 'profile',
           to: '/profile'
         }
       ],
@@ -95,6 +99,12 @@ export default {
       right: true,
       rightDrawer: false,
       title: 'bilim.kz'
+    }
+  },
+  methods: {
+    getLocalizedRoute (path) {
+      const langPrefix = this.$root.context.app.i18n.defaultLocale === this.$root.context.app.i18n.locale ? '' : `/${this.$root.context.app.i18n.locale}`
+      return `${langPrefix}${path}`
     }
   }
 }
