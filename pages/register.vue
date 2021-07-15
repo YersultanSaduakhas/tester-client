@@ -78,6 +78,7 @@
 <script>
 import axios from 'axios'
 export default {
+  auth: false,
   data: () => ({
     darkTheme: true,
     platformName: 'Platform name',
@@ -91,12 +92,12 @@ export default {
     alertError: false,
     errorText: '',
     emailRules: [
-      v => !!v || 'required',
-      v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+      v => !!v || '*.*',
+      v => /.+@.+\..+/.test(v) || 'E-mail*'
     ],
     show1: false,
     rules: {
-      required: value => !!value || 'required.',
+      required: value => !!value || '*.*',
       min: v => (v && v.length >= 8) || 'Min 8 characters'
     }
   }),

@@ -25,7 +25,8 @@
             outline
             :label="$t('email')"
             type="text"
-            v-model="username"
+            v-model="email"
+            :rules="emailRules"
             required
           ></v-text-field>
           <v-text-field
@@ -42,7 +43,7 @@
       <v-card-actions :class="{ 'pa-3': $vuetify.breakpoint.smAndUp }">
         <v-btn color="info" flat> {{ $t('forgot_password') }}? </v-btn>
         <v-spacer></v-spacer>
-        <v-btn color="info" :large="$vuetify.breakpoint.smAndUp">
+        <v-btn @click="userLogin" color="info" :large="$vuetify.breakpoint.smAndUp">
           <v-icon left>mdi-lock</v-icon>
           {{ $t('login') }}
         </v-btn>
@@ -55,8 +56,23 @@ export default {
     darkTheme: true,
     platformName: 'Platform name',
     password: null,
-    username: null
-  })
+    email: null,
+    emailRules: [
+      v => !!v || '*.*',
+      v => /.+@.+\..+/.test(v) || 'E-mail*'
+    ]
+  }),
+  methods: {
+    async userLogin () {
+      try {
+        debugger
+        const response = await this.$auth.loginWith('cookie', { data: {email: this.email, password: this.password} })
+        console.log(response)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
 }
 </script>
 <style>

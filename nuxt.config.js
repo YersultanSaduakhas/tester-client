@@ -41,6 +41,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
     '@nuxtjs/proxy',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
@@ -81,6 +82,10 @@ export default {
     }
   },
 
+  router: {
+    middleware: ['auth']
+  },
+  
   vuetify: {
     optionsPath: './vuetify.options.js'
   },
@@ -115,5 +120,34 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  } 
+  },
+  auth: {
+    redirect: {
+      login: "/login",
+      logout: "/login",
+      callback: "/login",
+      home: false,
+    },
+    strategies: {
+      local: false,
+      cookie: {
+        token: {
+          property: "data.token",
+          required: true,
+          type: "Bearer",
+        },
+        user: {
+          property: "data",
+        },
+        endpoints: {
+          login: {
+            url: "api/login",
+            method: "post",
+          },
+          logout: { url: "/api/logout", method: "post" },
+          user: { url: "/api/user", method: "get" },
+        },
+      },
+    },
+  }, 
 }
