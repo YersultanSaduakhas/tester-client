@@ -22,7 +22,7 @@
       <v-btn
         color="orange"
         text
-        to="choose_lessons"
+        :to="getLocalizedRoute('/choose_lessons')"
       >
         {{ $t('start_a_test') }}
       </v-btn>
@@ -47,6 +47,12 @@ export default {
   components: {
     // Logo,
     // VuetifyLogo
+  },
+  methods: {
+    getLocalizedRoute (path) {
+      const langPrefix = this.$root.context.app.i18n.defaultLocale === this.$root.context.app.i18n.locale ? '' : `/${this.$root.context.app.i18n.locale}`
+      return `${langPrefix}${path}`
+    }
   }
 }
 </script>

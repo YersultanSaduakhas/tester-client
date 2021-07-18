@@ -63,7 +63,8 @@ export default {
       ],
       langDir: 'lang/',
       defaultLocale: 'kz',
-    }]
+    }],
+    '@nuxtjs/toast'
   ],
   proxy: {
     // see Proxy section
@@ -72,7 +73,8 @@ export default {
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    proxy: true
+    proxy: true,
+    credentials: true
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -131,13 +133,12 @@ export default {
     strategies: {
       local: false,
       cookie: {
-        token: {
-          property: "data.token",
-          required: true,
-          type: "Bearer",
-        },
+        // cookie: {
+        //   name: 'jwt',
+        // },
         user: {
-          property: "data",
+          property: false, 
+          autoFetch: true
         },
         endpoints: {
           login: {
@@ -150,4 +151,17 @@ export default {
       },
     },
   }, 
+  toast: {
+    position: 'bottom-center',
+    register: [ // Register custom toasts
+      {
+        name: 'my-error',
+        message: 'Oops...Something went wrong',
+        options: {
+          type: 'error'
+        }
+      }
+    ],
+    duration:5000
+  }
 }

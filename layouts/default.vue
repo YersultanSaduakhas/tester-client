@@ -19,17 +19,88 @@
     <v-divider></v-divider>
     <v-list>
         <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="getLocalizedRoute(item.to)"
+          :to="getLocalizedRoute('/')"
           router
-          exact
+          exactz
         >
           <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon>mdi-apps</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="$t(item.title)" />
+            <v-list-item-title v-text="$t('start_a_test')" />
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item
+          v-if="!$auth.loggedIn||$auth.loggedIn===false"
+          :to="getLocalizedRoute('/login')"
+          router
+          exactz
+        >
+          <v-list-item-action>
+            <v-icon>mdi-login</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="$t('login')" />
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item
+          v-if="!$auth.loggedIn||$auth.loggedIn===false"
+          :to="getLocalizedRoute('/register')"
+          router
+          exactz
+        >
+          <v-list-item-action>
+            <v-icon>mdi-account-plus</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="$t('register')" />
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item
+          v-if="$auth.loggedIn&&$auth.loggedIn===true&&$auth.user.is_admin===true"
+          :to="getLocalizedRoute('/lessons')"
+          router
+          exactz
+        >
+          <v-list-item-action>
+            <v-icon>mdi-clipboard-list</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="$t('lessons_admin')" />
+          </v-list-item-content>
+        </v-list-item>
+         <v-list-item
+          v-if="$auth.loggedIn&&$auth.loggedIn===true&&$auth.user.is_admin===true"
+          :to="getLocalizedRoute('/questions')"
+          router
+          exactz
+        >
+          <v-list-item-action>
+            <v-icon>mdi-file-question</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="$t('questions_admin')" />
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item
+          v-if="$auth.loggedIn&&$auth.loggedIn===true"
+          :to="getLocalizedRoute('/profile')"
+          router
+          exactz
+        >
+          <v-list-item-action>
+            <v-icon>mdi-account-arrow-left</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="$t('profile')" />
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item v-if="$auth.loggedIn&&$auth.loggedIn===true" @click="logout()">
+          <v-list-item-action>
+            <v-icon>mdi-logout</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="$t('logout')" />
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -73,28 +144,6 @@ export default {
     return {
       drawer: false,
       fixed: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'start_a_test',
-          to: '/'
-        },
-        {
-          icon: 'mdi-login',
-          title: 'login',
-          to: '/login'
-        },
-        {
-          icon: 'mdi-account-plus',
-          title: 'register',
-          to: '/register'
-        },
-        {
-          icon: 'mdi-account-arrow-left',
-          title: 'profile',
-          to: '/profile'
-        }
-      ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
@@ -105,6 +154,10 @@ export default {
     getLocalizedRoute (path) {
       const langPrefix = this.$root.context.app.i18n.defaultLocale === this.$root.context.app.i18n.locale ? '' : `/${this.$root.context.app.i18n.locale}`
       return `${langPrefix}${path}`
+    },
+    async logout () {
+      await this.$auth.logout()
+      this.$router.push({ path: this.getLocalizedRoute('/login') })
     }
   }
 }

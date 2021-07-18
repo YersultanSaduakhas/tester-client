@@ -120,22 +120,24 @@ export default {
         //     password: this.password
         //   })
         // })
-        await axios.post('/api/register', {
-          name: this.firstName,
-          email: this.email,
-          password: this.password
-        }).then(function (response) {
-          this.$router.push('/login')
-          console.log(response)
-        }).catch(function (error) {
-          this.errorText = error
-          console.log(error)
-          this.alertError = true
-          window.setTimeout(() => {
-            this.alertError = false
-          }, 3000)
-        })
+        try {
+          this.$toast.show('Registering ...')
+          await axios.post('/api/register', {
+            name: this.firstName + ' ' + this.lastName,
+            email: this.email,
+            password: this.password
+          })
+          this.$router.push(this.getLocalizedRoute('/login'))
+          this.$toast.success('successfully registered...')
+        } catch (err) {
+          console.log(err)
+          this.$toast.error('Error while registering')
+        }
       }
+    },
+    getLocalizedRoute (path) {
+      const langPrefix = this.$root.context.app.i18n.defaultLocale === this.$root.context.app.i18n.locale ? '' : `/${this.$root.context.app.i18n.locale}`
+      return `${langPrefix}${path}`
     },
     reset () {
       this.$refs.form.reset()

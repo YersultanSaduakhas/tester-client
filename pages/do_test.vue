@@ -54,6 +54,7 @@
 
 <script>
 export default {
+  auth: false,
   data: () => ({
     knowledge: 35,
     answerChoosen: -1,

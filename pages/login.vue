@@ -65,12 +65,18 @@ export default {
   methods: {
     async userLogin () {
       try {
-        debugger
-        const response = await this.$auth.loginWith('cookie', { data: {email: this.email, password: this.password} })
-        console.log(response)
+        this.$toast.show('Logging in...')
+        await this.$auth.loginWith('cookie', { data: { email: this.email, password: this.password } })
+        this.$router.push(this.getLocalizedRoute('/profile'))
+        this.$toast.success('Successfully authenticated')
       } catch (err) {
         console.log(err)
+        this.$toast.error('Error while authenticating')
       }
+    },
+    getLocalizedRoute (path) {
+      const langPrefix = this.$root.context.app.i18n.defaultLocale === this.$root.context.app.i18n.locale ? '' : `/${this.$root.context.app.i18n.locale}`
+      return `${langPrefix}${path}`
     }
   }
 }

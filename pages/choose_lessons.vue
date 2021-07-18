@@ -1,10 +1,10 @@
 <template>
   <v-card max-width='600' class='mx-auto'>
     <v-toolbar color='light-blue' dark>
-      <v-toolbar-title>Panderdi tandau</v-toolbar-title>
+      <v-toolbar-title>{{ $t('choose_lessons') }}</v-toolbar-title>
     </v-toolbar>
     <v-list subheader two-line>
-      <v-subheader inset>Mindetti pander</v-subheader>
+      <v-subheader inset>{{ $t('required_lessons') }}</v-subheader>
 
       <v-list-item v-for='mainSubject in mainSubjects' :key='mainSubject.title'>
         <v-list-item-avatar>
@@ -14,7 +14,7 @@
         <v-list-item-content>
           <v-list-item-title v-text='mainSubject.title'></v-list-item-title>
 
-          <v-list-item-subtitle v-text='mainSubject.subtitle'></v-list-item-subtitle>
+          <v-list-item-subtitle v-text="$t('total_question_count') + ' ' + mainSubject.questions_count"></v-list-item-subtitle>
         </v-list-item-content>
 
         <!-- <v-list-item-action>
@@ -26,7 +26,7 @@
 
       <v-divider inset></v-divider>
 
-      <v-subheader inset>Qosymsha pander</v-subheader>
+      <v-subheader inset>{{ $t('additional_lessons') }}</v-subheader>
 
       <v-list-item v-for='(additionalSubject,ind) in selectedAdditionalSubjects' :key='additionalSubject.title'>
         <v-list-item-avatar>
@@ -34,9 +34,9 @@
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title v-text='additionalSubject.title'></v-list-item-title>
+          <v-list-item-title v-text="additionalSubject.id===-1 ? $t('not_choosen') : additionalSubject.title"></v-list-item-title>
 
-          <v-list-item-subtitle v-text='additionalSubject.subtitle'></v-list-item-subtitle>
+          <v-list-item-subtitle v-text="additionalSubject.id===-1 ? '' : $t('total_question_count') + ' ' +  additionalSubject.questions_count"></v-list-item-subtitle>
         </v-list-item-content>
 
         <v-list-item-action>
@@ -46,7 +46,7 @@
           tile
            @click="chooseSubject(ind)">
             <v-icon color='white'>mdi-plus</v-icon>
-            Tandau
+            {{ $t('choose') }}
           </v-btn>
         </v-list-item-action>
       </v-list-item>
@@ -61,7 +61,7 @@
       type="error"
       v-if="selectedAdditionalSubjects[0].id==-1||selectedAdditionalSubjects[1].id==-1"
     >
-      Qosymsha pander tandalmagan
+      {{ $t('additional_lessons_not_choosen_error') }}
     </v-alert>
     <v-btn
     class="white--text"
@@ -70,7 +70,7 @@
       :disabled="selectedAdditionalSubjects[0].id==-1||selectedAdditionalSubjects[1].id==-1"
       to="do_test"
     >
-    Synaqti bastau
+    {{ $t('start_a_test') }}
       <v-icon left>
         mdi-arrow-right
       </v-icon>
@@ -104,14 +104,14 @@
             text
             @click="showDialog = false"
           >
-            Close
+            {{ $t('close') }}
           </v-btn>
           <v-btn
             color="blue darken-1"
             text
             @click="save()"
           >
-            Save
+            {{ $t('save') }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -120,6 +120,7 @@
 </template>
 <script>
 export default {
+  auth: false,
   data: () => ({
     showDialog: false,
     currentLesson: 3,
@@ -127,18 +128,22 @@ export default {
     additionalSubjects: [
       {
         title: 'Biologya',
+        questions_count: 40,
         id: 4
       },
       {
         title: 'Himiya',
+        questions_count: 40,
         id: 5
       },
       {
         title: 'Fizika',
+        questions_count: 40,
         id: 6
       },
       {
         title: 'Adebyet',
+        questions_count: 40,
         id: 7
       }
     ],
@@ -147,31 +152,31 @@ export default {
       {
         color: 'blue',
         icon: 'mdi-clipboard-text',
-        subtitle: '',
-        title: 'Tandalmagan',
+        questions_count: 40,
+        title: '',
         id: -1
       },
       {
         color: 'blue',
         icon: 'mdi-clipboard-text',
-        subtitle: '',
-        title: 'Tandalmagan',
+        questions_count: 40,
+        title: '',
         id: -1
       }
     ],
     mainSubjects: [
       {
-        subtitle: 'jalpy suraktar sani 40',
+        questions_count: 40,
         title: 'Matematika',
         id: 1
       },
       {
-        subtitle: 'jalpy suraktar sani 35',
+        questions_count: 45,
         title: 'Qazaq tili',
         id: 2
       },
       {
-        subtitle: 'jalpy suraktar sani 40',
+        questions_count: 35,
         title: 'Qazaqstan tarihi',
         id: 3
       }

@@ -14,5 +14,8 @@ module.exports = {
   plugins: [
   ],
   // add your custom rules here
-  rules: {}
+  rules: {
+    // 'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    "vue/no-use-v-if-with-v-for": "off"
+  }
 }
