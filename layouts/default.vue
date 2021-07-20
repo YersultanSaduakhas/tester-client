@@ -1,28 +1,21 @@
 <template>
   <v-app custom>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      fixed
-      app
-    >
-    <v-list-item @click.stop="drawer = !drawer">
-      <v-list-item-content>
-        <v-list-item-title class="text-h6">
-          <v-btn icon><v-icon>mdi-school-outline</v-icon></v-btn>BILIM.KZ
-        </v-list-item-title>
-        <v-list-item-subtitle>
-          ubt-ga dayindik sinaktary
-        </v-list-item-subtitle>
-      </v-list-item-content>
-    </v-list-item>
-    <v-divider></v-divider>
-    <v-list>
-        <v-list-item
-          :to="getLocalizedRoute('/')"
-          router
-          exactz
-        >
+    <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" fixed app>
+      <v-list-item @click.stop="drawer = !drawer">
+        <v-list-item-content>
+          <v-list-item-title class="text-h6">
+            <v-btn icon>
+              <v-icon>mdi-school-outline</v-icon>
+            </v-btn>BILIM.KZ
+          </v-list-item-title>
+          <v-list-item-subtitle>
+            ubt-ga dayindik sinaktary
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider />
+      <v-list>
+        <v-list-item :to="getLocalizedRoute('/')" router exactz>
           <v-list-item-action>
             <v-icon>mdi-apps</v-icon>
           </v-list-item-action>
@@ -31,7 +24,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item
-          v-if="!$auth.loggedIn||$auth.loggedIn===false"
+          v-if="!$auth.loggedIn || $auth.loggedIn === false"
           :to="getLocalizedRoute('/login')"
           router
           exactz
@@ -44,7 +37,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item
-          v-if="!$auth.loggedIn||$auth.loggedIn===false"
+          v-if="!$auth.loggedIn || $auth.loggedIn === false"
           :to="getLocalizedRoute('/register')"
           router
           exactz
@@ -57,7 +50,11 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item
-          v-if="$auth.loggedIn&&$auth.loggedIn===true&&$auth.user.is_admin===true"
+          v-if="
+            $auth.loggedIn &&
+              $auth.loggedIn === true &&
+              $auth.user.is_admin === true
+          "
           :to="getLocalizedRoute('/lessons')"
           router
           exactz
@@ -69,8 +66,12 @@
             <v-list-item-title v-text="$t('lessons_admin')" />
           </v-list-item-content>
         </v-list-item>
-         <v-list-item
-          v-if="$auth.loggedIn&&$auth.loggedIn===true&&$auth.user.is_admin===true"
+        <v-list-item
+          v-if="
+            $auth.loggedIn &&
+              $auth.loggedIn === true &&
+              $auth.user.is_admin === true
+          "
           :to="getLocalizedRoute('/questions')"
           router
           exactz
@@ -83,7 +84,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item
-          v-if="$auth.loggedIn&&$auth.loggedIn===true"
+          v-if="$auth.loggedIn && $auth.loggedIn === true"
           :to="getLocalizedRoute('/profile')"
           router
           exactz
@@ -95,7 +96,10 @@
             <v-list-item-title v-text="$t('profile')" />
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="$auth.loggedIn&&$auth.loggedIn===true" @click="logout()">
+        <v-list-item
+          v-if="$auth.loggedIn && $auth.loggedIn === true"
+          @click="logout()"
+        >
           <v-list-item-action>
             <v-icon>mdi-logout</v-icon>
           </v-list-item-action>
@@ -105,14 +109,12 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar
-    dark
-    app
-    fixed
-    >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title color="#d3008d">bilim.kz</v-toolbar-title>
-      <v-spacer></v-spacer>
+    <v-app-bar dark app fixed>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-toolbar-title color="#d3008d">
+        bilim.kz
+      </v-toolbar-title>
+      <v-spacer />
       <NuxtLink :to="switchLocalePath('kz')">
         <img class="mr-3" src="img/flag_kazakhstan_24.png">
       </NuxtLink>
@@ -129,10 +131,7 @@
         <nuxt />
       </v-container>
     </v-main>
-    <v-footer
-      :absolute="!fixed"
-      app
-    >
+    <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
@@ -152,13 +151,18 @@ export default {
   },
   methods: {
     getLocalizedRoute (path) {
-      const langPrefix = this.$root.context.app.i18n.defaultLocale === this.$root.context.app.i18n.locale ? '' : `/${this.$root.context.app.i18n.locale}`
+      const langPrefix =
+        this.$root.context.app.i18n.defaultLocale ===
+        this.$root.context.app.i18n.locale
+          ? ''
+          : `/${this.$root.context.app.i18n.locale}`
       return `${langPrefix}${path}`
     },
     async logout () {
       await this.$auth.logout()
       this.$router.push({ path: this.getLocalizedRoute('/login') })
-    }
+    },
+    switchLocalePath (lang) {}
   }
 }
 </script>

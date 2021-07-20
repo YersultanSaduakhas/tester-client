@@ -45,7 +45,7 @@ export default {
     '@nuxtjs/proxy',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
-    ['nuxt-i18n',{
+    ['nuxt-i18n', {
       // strategy: 'prefix_except_default',
       locales: [
         {
@@ -59,17 +59,17 @@ export default {
           code: 'ru',
           iso: 'ru-RU',
           file: 'ru.js'
-        },
+        }
       ],
       langDir: 'lang/',
-      defaultLocale: 'kz',
+      defaultLocale: 'kz'
     }],
     '@nuxtjs/toast'
   ],
   proxy: {
     // see Proxy section
-    '/api': { target: 'https://bilim.api.icatalog.kz/api', pathRewrite: {'^/api': ''} }
-    
+    '/api': { target: 'https://bilim.api.icatalog.kz/api', pathRewrite: { '^/api': '' } }
+
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
@@ -87,7 +87,7 @@ export default {
   router: {
     middleware: ['auth']
   },
-  
+
   vuetify: {
     optionsPath: './vuetify.options.js'
   },
@@ -125,10 +125,10 @@ export default {
   },
   auth: {
     redirect: {
-      login: "/login",
-      logout: "/login",
-      callback: "/login",
-      home: false,
+      login: '/login',
+      logout: '/login',
+      callback: '/login',
+      home: false
     },
     strategies: {
       local: false,
@@ -137,20 +137,20 @@ export default {
         //   name: 'jwt',
         // },
         user: {
-          property: false, 
+          property: false,
           autoFetch: true
         },
         endpoints: {
           login: {
-            url: "api/login",
-            method: "post",
+            url: 'api/login',
+            method: 'post'
           },
-          logout: { url: "/api/logout", method: "post" },
-          user: { url: "/api/user", method: "get" },
-        },
-      },
-    },
-  }, 
+          logout: { url: '/api/logout', method: 'post' },
+          user: { url: '/api/user', method: 'get' }
+        }
+      }
+    }
+  },
   toast: {
     position: 'bottom-center',
     register: [ // Register custom toasts
@@ -162,6 +162,6 @@ export default {
         }
       }
     ],
-    duration:5000
+    duration: 5000
   }
 }

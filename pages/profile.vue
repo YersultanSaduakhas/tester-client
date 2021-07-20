@@ -9,7 +9,7 @@
           :label="$t('full_name')"
           :value="$auth.user.name"
           disabled
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
 
@@ -22,7 +22,7 @@
           :label="$t('email')"
           :value="$auth.user.email"
           disabled
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
 
@@ -35,7 +35,7 @@
           :label="$t('register_date')"
           :value="$auth.user.created_at"
           disabled
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
   </v-container>

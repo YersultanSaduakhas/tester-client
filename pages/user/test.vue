@@ -1,3 +1,3 @@
 <template>
-    <v-label>testtststst</v-label>
+  <v-label>testtststst</v-label>
 </template>

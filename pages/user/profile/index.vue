@@ -7,7 +7,7 @@
       <v-col cols="8">
         <v-text-field
           label="name"
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
 
@@ -18,7 +18,7 @@
       <v-col cols="8">
         <v-text-field
           label="second name"
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
 
@@ -31,7 +31,7 @@
           label="Email address"
           value="example"
           suffix="@gmail.com"
-        ></v-text-field>
+        />
       </v-col>
     </v-row>
   </v-container>
