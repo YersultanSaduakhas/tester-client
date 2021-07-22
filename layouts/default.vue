@@ -115,12 +115,8 @@
         bilim.kz
       </v-toolbar-title>
       <v-spacer />
-      <NuxtLink :to="switchLocalePath('kz')">
-        <img class="mr-3" src="img/flag_kazakhstan_24.png">
-      </NuxtLink>
-      <NuxtLink :to="switchLocalePath('ru')">
-        <img src="img/flag_russia_24.png">
-      </NuxtLink>
+      <img class="mr-3" @click="switchLocalePath('kz')" src="img/flag_kazakhstan_24.png">
+      <img @click="switchLocalePath('ru')" src="img/flag_russia_24.png">
       <!-- <v-btn icon>
         <v-icon>mdi-export</v-icon>
       </v-btn> -->
@@ -153,16 +149,24 @@ export default {
     getLocalizedRoute (path) {
       const langPrefix =
         this.$root.context.app.i18n.defaultLocale ===
-        this.$root.context.app.i18n.locale
+        this.$root.context.app.i18n.getLocaleCookie()
           ? ''
-          : `/${this.$root.context.app.i18n.locale}`
-      return `${langPrefix}${path}`
+          : `/${this.$root.context.app.i18n.getLocaleCookie()}`
+      const url = `${langPrefix}${path}`
+      const url_ = url.endsWith('ru/') ? url.slice(0, -1) : url
+      return url_
     },
     async logout () {
       await this.$auth.logout()
-      this.$router.push({ path: this.getLocalizedRoute('/login') })
+      this.$router.push(this.getLocalizedRoute('/login'))
     },
-    switchLocalePath (lang) {}
+    goTo (url) {
+      this.$router.push(this.getLocalizedRoute(url))
+    },
+    switchLocalePath (lang) {
+      this.$root.context.app.i18n.setLocale(lang)
+      this.$router.push(this.getLocalizedRoute(this.$route.fullPath === '/ru' || this.$route.fullPath === '/kz' ? '/' : this.$route.fullPath))
+    }
   }
 }
 </script>
