@@ -33,6 +33,7 @@ export default {
   additional_lessons: 'Дополнительный предмет',
   total_question_count: 'Общее колчество вопросов',
   question_count: 'Колчество вопросов',
+  quiz_question_count: 'Колчество вопросов во время теста',
   choose: 'Выбрать',
   not_choosen: 'Не выбран',
   additional_lessons_not_choosen_error: 'Дополнительный предметы не выбраны',
@@ -44,5 +45,6 @@ export default {
   save: 'Сохранить',
   register_date: 'Дата регистрации',
   search: 'Поиск',
-  language: 'Язык'
+  language: 'Язык',
+  action: 'Действие'
 }

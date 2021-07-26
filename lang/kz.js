@@ -33,6 +33,7 @@ export default {
   additional_lessons: 'Қосымша пән',
   total_question_count: 'Жалпы сұрақтар саны',
   question_count: 'Сұрақтар саны',
+  quiz_question_count: 'Тест кезіндегі сұрақтар саны',
   choose: 'Таңдау',
   not_choosen: 'Таңдалмаған',
   additional_lessons_not_choosen_error: 'Қосымша пәндер таңдалмаған',
@@ -44,5 +45,6 @@ export default {
   save: 'Сақтау',
   register_date: 'Тіркелген уақыты',
   search: 'Іздеу',
-  language: 'Тіл'
+  language: 'Тіл',
+  action: 'Амал'
 }

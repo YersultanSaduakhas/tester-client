@@ -76,7 +76,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item
-          v-if="isAdmin"
+          v-if="isAuthenticated"
           :to="getLocalizedRoute('/profile')"
           router
           exactz
@@ -126,6 +126,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -138,9 +139,15 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['isAuthenticated', 'loggedInUser']),
     isAdmin () {
-      return this.$auth.loggedIn && this.$auth.loggedIn === true && this.$auth.user.is_admin === true
+      return this.$auth.state.loggedIn && this.$auth.state.loggedIn === true && this.$auth.user.is_admin === true
     }
+  },
+  mounted () {
+    this.$auth.$storage.watchState('loggedIn', (newValue) => {
+      console.log(newValue)
+    })
   },
   methods: {
     getLocalizedRoute (path) {

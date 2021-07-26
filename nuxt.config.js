@@ -149,7 +149,8 @@ export default {
           user: { url: '/api/user', method: 'get' }
         }
       }
-    }
+    },
+    watchLoggedIn: true
   },
   toast: {
     position: 'bottom-center',
