@@ -46,7 +46,7 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     ['nuxt-i18n', {
-      strategy: 'prefix_and_default',
+      // strategy: 'prefix_and_default',
       locales: [
         {
           name: 'kz',
