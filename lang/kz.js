@@ -1,5 +1,6 @@
 export default {
   welcome: 'Сәлем',
+  name: 'Атауы',
   first_name: 'Аты',
   last_name: 'Тегі',
   full_name: 'Аты-жөні',
@@ -20,11 +21,18 @@ export default {
   next: 'Келесі',
   end_a_test: 'Сынақты бітіру',
   lessons_admin: 'Пәндер (админ)',
+  lesson: 'Пән',
+  lessons: 'Пәндер',
+  new_lesson: 'Жаңа пән',
+  add_new_lesson: 'Жаңа пән қосу',
+  edit_lesson: 'Пәнге өзгеріс енгізу',
+  remove_lesson: 'Пәнді өшіру',
   questions_admin: 'Сұрақтар (админ)',
   choose_lessons: 'Пәндерді таңдау',
   required_lessons: 'Міндетті пән',
   additional_lessons: 'Қосымша пән',
   total_question_count: 'Жалпы сұрақтар саны',
+  question_count: 'Сұрақтар саны',
   choose: 'Таңдау',
   not_choosen: 'Таңдалмаған',
   additional_lessons_not_choosen_error: 'Қосымша пәндер таңдалмаған',
@@ -34,5 +42,7 @@ export default {
   profile: 'Жеке бет',
   close: 'Жабу',
   save: 'Сақтау',
-  register_date: 'Тіркелген уақыты'
+  register_date: 'Тіркелген уақыты',
+  search: 'Іздеу',
+  language: 'Тіл'
 }

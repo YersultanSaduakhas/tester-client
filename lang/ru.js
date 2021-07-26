@@ -1,5 +1,6 @@
 export default {
   welcome: 'Привет',
+  name: 'Наименование',
   first_name: 'Имя',
   last_name: 'Фамилия',
   full_name: 'Имя',
@@ -21,10 +22,17 @@ export default {
   end_a_test: 'Завершить тест',
   lessons_admin: 'Пердметы (админ)',
   questions_admin: 'Вопросы (админ)',
+  lessons: 'Пердметы',
+  lesson: 'Пердмет',
+  new_lesson: 'Новый предмет',
+  add_new_lesson: 'Добавить новый предмет',
+  edit_lesson: 'Редактировать предмет',
+  remove_lesson: 'Удалить пердмет',
   choose_lessons: 'Выбрать пердметы',
   required_lessons: 'Обязательный предмет',
   additional_lessons: 'Дополнительный предмет',
   total_question_count: 'Общее колчество вопросов',
+  question_count: 'Колчество вопросов',
   choose: 'Выбрать',
   not_choosen: 'Не выбран',
   additional_lessons_not_choosen_error: 'Дополнительный предметы не выбраны',
@@ -34,5 +42,7 @@ export default {
   profile: 'Профиль',
   close: 'Закрыть',
   save: 'Сохранить',
-  register_date: 'Дата регистрации'
+  register_date: 'Дата регистрации',
+  search: 'Поиск',
+  language: 'Язык'
 }

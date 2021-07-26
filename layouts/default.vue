@@ -50,12 +50,8 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item
-          v-if="
-            $auth.loggedIn &&
-              $auth.loggedIn === true &&
-              $auth.user.is_admin === true
-          "
-          :to="getLocalizedRoute('/lessons')"
+          v-if="isAdmin"
+          :to="getLocalizedRoute('/user/admin/lessons')"
           router
           exactz
         >
@@ -67,12 +63,8 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item
-          v-if="
-            $auth.loggedIn &&
-              $auth.loggedIn === true &&
-              $auth.user.is_admin === true
-          "
-          :to="getLocalizedRoute('/questions')"
+          v-if="isAdmin"
+          :to="getLocalizedRoute('/user/admin/questions')"
           router
           exactz
         >
@@ -84,7 +76,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item
-          v-if="$auth.loggedIn && $auth.loggedIn === true"
+          v-if="isAdmin"
           :to="getLocalizedRoute('/profile')"
           router
           exactz
@@ -115,12 +107,8 @@
         bilim.kz
       </v-toolbar-title>
       <v-spacer />
-      <NuxtLink :to="switchLocalePath('kz')">
-        <img class="mr-3" src="img/flag_kazakhstan_24.png">
-      </NuxtLink>
-      <NuxtLink :to="switchLocalePath('ru')">
-        <img src="img/flag_russia_24.png">
-      </NuxtLink>
+        <img class="mr-3" @click="switchLocalePath('kz')" src="img/flag_kazakhstan_24.png">
+        <img @click="switchLocalePath('ru')" src="img/flag_russia_24.png">
       <!-- <v-btn icon>
         <v-icon>mdi-export</v-icon>
       </v-btn> -->
@@ -149,6 +137,11 @@ export default {
       title: 'bilim.kz'
     }
   },
+  computed: {
+    isAdmin () {
+      return this.$auth.loggedIn && this.$auth.loggedIn === true && this.$auth.user.is_admin === true
+    }
+  },
   methods: {
     getLocalizedRoute (path) {
       const langPrefix =
@@ -162,7 +155,10 @@ export default {
       await this.$auth.logout()
       this.$router.push({ path: this.getLocalizedRoute('/login') })
     },
-    switchLocalePath (lang) {}
+    switchLocalePath (lang) {
+      this.$root.context.app.i18n.setLocale(lang)
+      this.$root.context.app.switchLocalePath(lang)
+    }
   }
 }
 </script>

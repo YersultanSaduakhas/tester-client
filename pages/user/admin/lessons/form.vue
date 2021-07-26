@@ -1,22 +1,47 @@
 <template>
   <v-card>
     <v-card-title>
-      {{ $t('lessons') }}
+      {{ $route.query.mode === 'new' ? $t('new_lesson') : $t('lesson') + ': '+ currentLesson.name }}
       <v-spacer />
-      <v-text-field
+      <!-- <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
         :label="$t('search')"
         single-line
         hide-details
-      />
+      /> -->
     </v-card-title>
+    <v-row class="ml-5 mt-5 mb-5">
+        <form>
+            <v-text-field
+              v-model="currentLesson.name"
+              :rules="[rules.required]"
+              :label="$t('name')"
+              maxlength="50"
+              required
+            ></v-text-field>
+            <v-select
+            v-model="select"
+            :items="langs"
+            :label="$t('language')"
+            required
+            ></v-select>
+            <v-btn
+            class="mr-4"
+            @click="submit"
+            >
+            submit
+            </v-btn>
+            <v-btn @click="clear">
+            clear
+            </v-btn>
+        </form>
+    </v-row>
     <v-row class="mt-5 mb-5">
       <v-btn
         tile
         color="success"
         class="ml-5"
-        :to="{ path:'/user/admin/lessons/form', query : { mode:'new' }}"
       >
       <v-icon>
           mdi-plus
@@ -61,26 +86,39 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      currentLesson: null,
+      currentLesson: {},
       search: '',
       headers: [
         { text: '#', value: 'id' },
         { text: this.$t('name'), value: 'name' },
         { text: this.$t('question_count'), value: 'question_count' }
       ],
-      lessons: []
+      lessons: [],
+      langs: ['kz', 'ru'],
+      rules: {
+        required: value => !!value || '*.*',
+        min: v => (v && v.length >= 8) || 'Min 8 characters'
+      }
     }
   },
+  computed: {
+  },
   mounted () {
-    this.loadLessons()
+    if (this.$route.query.mode === 'edit') {
+      this.loadLesson(this.$route.params.id)
+    }
   },
   methods: {
-    async loadLessons () {
-      const res = await axios.get('/api/lesson')
+    async loadLesson (id) {
+      const res = await axios.get('/api/lesson/' + id)
       this.lessons = res.data
     },
     handleClick (row) {
       this.currentLesson = row
+    },
+    submit () {
+    },
+    clear () {
     }
   }
 }
