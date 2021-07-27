@@ -28,7 +28,17 @@ export default {
   add_new_lesson: 'Добавить новый предмет',
   edit_lesson: 'Редактировать предмет',
   remove_lesson: 'Удалить пердмет',
+  add_new_question: 'Добавить новый вопрос',
+  edit_question: 'Редактировать вопрос',
+  remove_question: 'Удалить вопрос',
+  questions: 'Вопросы',
+  question: 'Вопрос',
+  option: 'Вариант',
+  answer: 'Ответ',
+  reason: 'Причина',
+  hint: 'Предложение',
   choose_lessons: 'Выбрать пердметы',
+  required_lesson_type: 'Тип обязательного предмета',
   required_lessons: 'Обязательный предмет',
   additional_lessons: 'Дополнительный предмет',
   total_question_count: 'Общее колчество вопросов',
@@ -46,5 +56,8 @@ export default {
   register_date: 'Дата регистрации',
   search: 'Поиск',
   language: 'Язык',
-  action: 'Действие'
+  action: 'Действие',
+  math: 'Математика',
+  qazaq_tili: 'Казахский язык',
+  history: 'История Казахстана'
 }
