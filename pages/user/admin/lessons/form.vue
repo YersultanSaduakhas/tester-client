@@ -4,57 +4,80 @@
       {{ $route.query.mode === 'new' ? $t('new_lesson') : $t('lesson') + ': '+ currentLesson.name }}
     </v-card-title>
     <v-btn
-        tile
-        color="success"
-        class="ml-5"
-        :to="{ path:'/user/admin/lessons' }"
-      >
+      tile
+      color="success"
+      class="ml-5"
+      to="./"
+    >
       <v-icon>
-          mdi-arrow-left
-        </v-icon>
-        {{ $t('go_back') }}
-      </v-btn>
-      <v-row class="ml-5 mt-5 mb-5">
-      <form>
-          <v-text-field
-            v-model="currentLesson.name"
-            :rules="[rules.required]"
-            :label="$t('name')"
-            maxlength="50"
-            required
-          ></v-text-field>
-          <v-select
+        mdi-arrow-left
+      </v-icon>
+      {{ $t('go_back') }}
+    </v-btn>
+    <v-row class="ml-5 mt-5 mb-5">
+      <v-form ref="lessonForm" v-model="valid" lazy-validation>
+        <v-text-field
+          v-model="currentLesson.name"
+          :rules="[rules.required]"
+          :label="$t('name')"
+          maxlength="50"
+          required
+        />
+        <v-select
           v-model="currentLesson.language"
           :items="langs"
           :item-text="$t()"
           :label="$t('language')"
           required
-          ></v-select>
-          <v-select
+        />
+        <v-select
           v-model="currentLesson.l_type"
           :items="lessonTypes"
           :item-text="'title'"
           :item-value="'key'"
           :label="$t('required_lesson_type')"
           required
-          ></v-select>
-          <v-text-field
-            v-model="currentLesson.question_count"
-            :label="$t('total_question_count')"
-            disabled
-          ></v-text-field>
-          <v-text-field
-            v-model="currentLesson.question_count_to_test"
-            :label="$t('quiz_question_count')"
-            disabled
-          ></v-text-field>
-          <v-btn
+        />
+        <v-text-field
+          v-model="currentLesson.question_count"
+          :label="$t('total_question_count')"
+          disabled
+        />
+        <v-text-field
+          v-model="currentLesson.question_count_to_test"
+          :label="$t('quiz_question_count')"
+        />
+        <v-container v-if="showQuestionOperation">
+          <p>{{ $t('question_operation_warn') }}</p>
+          <v-radio-group
+            v-model="currentLesson.q_operation"
+            mandatory
+          >
+            <v-radio
+              :label="$t('no_touch_questions')"
+              value="no_touch"
+            />
+            <v-radio
+              :label="$t('only_new_questions')"
+              value="new"
+            />
+            <v-radio
+              :label="$t('merge_with_new_questions')"
+              value="merge"
+            />
+          </v-radio-group>
+        </v-container>
+        <v-btn
+          :disabled="!valid"
           class="mr-4"
           @click="submit"
-          >
+        >
           {{ $t('save') }}
-          </v-btn>
-      </form>
+        </v-btn>
+        <v-btn @click="cancel()">
+          {{ $t('cancel') }}
+        </v-btn>
+      </v-form>
     </v-row>
     <v-spacer />
     <v-row class="mt-5 mb-5">
@@ -62,83 +85,162 @@
         tile
         color="success"
         class="ml-5"
-        :to="{ path:'/user/admin/questions/form', query : { mode:'new' }}"
+        :to="{ path:'/user/admin/questions/form', query : { mode:'new', lesson_id: currentLesson.id }}"
       >
-      <v-icon>
+        <v-icon>
           mdi-plus
         </v-icon>
         {{ $t('add_new_question') }}
       </v-btn>
     </v-row>
+    <v-row class="ml-2">
+      <v-flex
+        xs4
+      >
+        <v-file-input
+          v-model="filename"
+          accept="file/*"
+          :label="$t('select_file')"
+          name="file"
+          @change="selectFile"
+        />
+        <v-btn
+          v-if="file"
+          class="upload-button"
+          color="primary"
+          @click="upload_file"
+        >
+          {{ $t('upload_question_file') }}
+        </v-btn>
+      </v-flex>
+    </v-row>
     <v-spacer />
-    <v-text-field
+    <v-flex
+      xs4
+    >
+      <v-text-field
         v-model="search"
+        class="ml-3"
         append-icon="mdi-magnify"
         :label="$t('search')"
         single-line
         hide-details
       />
+    </v-flex>
     <v-data-table
       :headers="headers"
       :items="questions"
       :search="search"
-      @click:row="handleClick"
       show-select
       single-select
       :page="page"
-      :pageCount="numberOfPages"
+      :page-count="numberOfPages"
       :server-items-length="totalQuestions"
       :loading="loading"
+      :options.sync="options"
+      @click:row="handleClick"
     >
-     <template v-slot:item="{ item }">
+      <template #item="{ item }">
         <tr :class="currentQuestion&&currentQuestion.id==item.id ? 'cyan':''" @click="handleClick(item)">
-            <td>{{ item.id }}</td>
-            <td>
-              <v-subheader>{{ item.text }}</v-subheader>
-              <v-subheader :dark="item.answer===1">1) {{ item.option_1 }}</v-subheader>
-              <v-subheader :dark="item.answer===2">2) {{ item.option_2 }}</v-subheader>
-              <v-subheader :dark="item.answer===3">3) {{ item.option_3 }}</v-subheader>
-              <v-subheader :dark="item.answer===4">4) {{ item.option_4 }}</v-subheader>
-              <v-subheader :dark="item.answer===5">5) {{ item.option_5 }}</v-subheader>
-              <v-subheader>{{ $t('reason')}} : {{ item.reason }}</v-subheader>
-              <v-subheader>{{ $t('hint')}} : {{ item.hint }}</v-subheader>
-            </td>
-            <td>
-              <v-tooltip left>
-               <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    tile
-                    color="info"
-                    v-bind="attrs"
-                    v-on="on"
-                    :to="{ path:'/user/admin/questions/form', query : { mode:'edit', id: item.id }}"
-                  >
+          <td>{{ item.id }}</td>
+          <td>
+            <span>{{ item.text }}</span>
+            <br>
+            <span :dark="item.answer===1">
+              1) {{ item.option_1 }}
+            </span>
+            <br>
+            <span :dark="item.answer===2">
+              2) {{ item.option_2 }}
+            </span>
+            <br>
+            <span :dark="item.answer===3">
+              3) {{ item.option_3 }}
+            </span>
+            <br>
+            <span :dark="item.answer===4">
+              4) {{ item.option_4 }}
+            </span>
+            <br>
+            <span :dark="item.answer===5">
+              5) {{ item.option_5 }}
+            </span>
+            <br>
+            <span>{{ $t('reason') }} : {{ item.reason }}</span>
+            <br>
+            <span>{{ $t('hint') }} : {{ item.hint }}</span>
+          </td>
+          <td>
+            <v-tooltip left>
+              <template #activator="{ on, attrs }">
+                <v-btn
+                  tile
+                  color="info"
+                  v-bind="attrs"
+                  :to="{ path:'/user/admin/questions/form', query : { mode:'edit', id: item.id, lesson_id: currentLesson.id }}"
+                  v-on="on"
+                >
                   <v-icon>
-                      mdi-pen
-                    </v-icon>
-                  </v-btn>
-                </template>
-                <span>{{ $t('edit_question')}}</span>
-              </v-tooltip>
-              <v-tooltip right>
-               <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    tile
-                    color="error"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
+                    mdi-pen
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>{{ $t('edit_question') }}</span>
+            </v-tooltip>
+            <v-tooltip right>
+              <template #activator="{ on, attrs }">
+                <v-btn
+                  tile
+                  color="error"
+                  v-bind="attrs"
+                  v-on="on"
+                  @click="showDeleteDialog=true"
+                >
                   <v-icon>
-                      mdi-close-box
-                    </v-icon>
-                  </v-btn>
-                </template>
-                <span>{{ $t('remove_question')}}</span>
-              </v-tooltip>
-            </td>
+                    mdi-close-box
+                  </v-icon>
+                </v-btn>
+              </template>
+              <span>{{ $t('remove_question') }}</span>
+            </v-tooltip>
+          </td>
         </tr>
       </template>
     </v-data-table>
+    <v-dialog
+      v-model="showDeleteDialog"
+      width="500"
+    >
+      <v-card>
+        <v-card-title class="text-h5 grey lighten-2">
+          {{ $t('remove_confirm') }}
+        </v-card-title>
+
+        <v-card-text>
+          {{ currentQuestion.id + ') '+ currentQuestion.text }}
+        </v-card-text>
+
+        <v-divider />
+
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            color="primary"
+            text
+            @click="deleteCurrentQuestion()"
+          >
+            OK
+          </v-btn>
+          <v-btn
+            color="error"
+            text
+            @click="showDeleteDialog=false"
+          >
+            {{ $t('cancel') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 <script>
@@ -146,6 +248,11 @@ import axios from 'axios'
 export default {
   data () {
     return {
+      valid: false,
+      showDeleteDialog: false,
+      showQuestionOperation: false,
+      file: '',
+      filename: null,
       currentQuestion: {
         id: null,
         text: null,
@@ -157,14 +264,14 @@ export default {
         language: 'kz',
         name: '',
         question_count: 0,
-        question_count_to_test: 0
+        question_count_to_test: 0,
+        q_operation: 'no_touch'
       },
       questions: [],
       search: '',
       headers: [
-        { text: '#', value: 'id' },
-        { text: this.$t('question') },
-        { text: this.$t('action') }
+        { text: this.$t('question'), align: 'center' },
+        { text: this.$t('action'), align: 'center' }
       ],
       page: 0,
       totalQuestions: 0,
@@ -174,6 +281,7 @@ export default {
       lessons: [],
       langs: ['kz', 'ru'],
       lessonTypes: [
+        { key: null, title: this.$t('additional_lessons') },
         { key: 'math', title: this.$t('math') },
         { key: 'qazaq_tili', title: this.$t('qazaq_tili') },
         { key: 'history', title: this.$t('history') }
@@ -186,10 +294,18 @@ export default {
   },
   computed: {
   },
+  watch: {
+    options: {
+      handler () {
+        const { page, itemsPerPage } = this.options
+        this.loadQuestions(this.$route.query.id, page + 1, itemsPerPage)
+      }
+    },
+    deep: true
+  },
   mounted () {
     if (this.$route.query.mode === 'edit') {
       this.loadLesson(this.$route.query.id, 1, 10)
-      this.loadQuestions(this.currentLesson.id, 1, 10)
     }
   },
   methods: {
@@ -207,18 +323,78 @@ export default {
       }
       query += '&page=' + page + '&size' + size
       const resQuestions = await axios.get('/api/question' + query)
-      this.currentLesson.questions = resQuestions.data
-      this.totalQuestions = resQuestions.total
-      this.numberOfPages = resQuestions.last_page
+      this.questions = resQuestions.data.data
+      this.totalQuestions = resQuestions.data.total
+      this.numberOfPages = resQuestions.data.last_page
       this.loading = false
     },
     handleClick (row) {
-      this.currentLesson = row
+      this.currentQuestion = row
     },
-    submit () {
+    async submit () {
+      debugger
+      if (this.$refs.lessonForm.validate()) {
+        if (this.$route.query.mode === 'new') {
+          this.currentLesson.q_operation = 'new'
+          this.$toast.show('saving new...')
+          await axios.post('/api/lesson', this.currentLesson)
+          this.$router.back()
+          this.$toast.success('successfully saved new')
+        } else {
+          this.$toast.show('saving existing...')
+          await axios.put('/api/lesson/' + this.currentLesson.id, this.currentLesson)
+          this.$router.back()
+          this.$toast.success('successfully saved existing')
+        }
+      }
     },
-    clear () {
+    async cancel () {
+      if (this.showQuestionOperation === true) {
+        await axios.delet('/api/lesson/-1')
+      }
+    },
+    selectFile (file) {
+      this.file = file
+    },
+    async upload_file () {
+      const formData = new FormData()
+      formData.append('select_file', this.file)
+      const url = '/api/import_excel/import'
+      const config = {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+      }
+      await this.$axios({
+        method: 'post',
+        url,
+        data: formData,
+        config
+      })
+      this.showQuestionOperation = this.$route.query.mode === 'edit'
+      this.loadQuestions(null, 1, 10)
+      this.filename = null
+      this.file = null
+    },
+    async deleteCurrentQuestion () {
+      this.$toast.show('delete existing question ...')
+      await axios.delete('/api/question/' + this.currentQuestion.id)
+      this.showDeleteDialog = false
+      this.$toast.success('successfully deleted existing question')
+      this.loadQuestions(this.$route.query.id, 1, 10)
     }
   }
 }
 </script>
+<style scoped>
+.hide-input {
+    display: none;
+}
+*{
+    text-transform: none !important;
+}
+.upload-button {
+    border-radius: 50px;
+    color: white;
+}
+</style>

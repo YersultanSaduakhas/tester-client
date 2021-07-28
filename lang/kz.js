@@ -25,6 +25,7 @@ export default {
   lessons: 'Пәндер',
   new_lesson: 'Жаңа пән',
   add_new_question: 'Жаңа сұрақ қосу',
+  new_question: 'Жаңа сұрақ',
   edit_question: 'Сұраққа өзгеріс енгізу',
   remove_question: 'Сұрақты өшіру',
   add_new_lesson: 'Жаңа пән қосу',
@@ -59,5 +60,14 @@ export default {
   action: 'Амал',
   math: 'Математика',
   qazaq_tili: 'Қазақ тілі',
-  history: 'Қазақстан тарихы'
+  history: 'Қазақстан тарихы',
+  upload_question_file: 'Сұрақтарды файлдан жүктеу',
+  select_file: 'Файлды таңдау',
+  cancel: 'Болдырмау',
+  question_operation_warn: 'Жаңадан Файлдан қосылған сұрақтармен не істеу керек',
+  no_touch_questions: 'Ешнәрсе істеме',
+  only_new_questions: 'Тек жаңа сұрақтарды қалдыр, ескілерін өшір',
+  merge_with_new_questions: 'Жаңа сұрақтарды ескілерімен біріктір',
+  remove_confirm: 'Мына сұрақты өшірейін бе ?'
+
 }

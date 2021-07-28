@@ -90,7 +90,7 @@ export default {
     platformName: 'Platform name',
     password: null,
     username: null,
-    valid: true,
+    valid: false,
     firstName: '',
     lastName: '',
     email: '',
@@ -133,7 +133,7 @@ export default {
             email: this.email,
             password: this.password
           })
-          this.$router.push(this.getLocalizedRoute('/login'))
+          this.$router.push('/login')
           this.$toast.success('successfully registered...')
         } catch (err) {
           console.log(err)

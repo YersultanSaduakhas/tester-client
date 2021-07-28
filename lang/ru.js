@@ -28,6 +28,7 @@ export default {
   add_new_lesson: 'Добавить новый предмет',
   edit_lesson: 'Редактировать предмет',
   remove_lesson: 'Удалить пердмет',
+  new_question: 'Новый вопрос',
   add_new_question: 'Добавить новый вопрос',
   edit_question: 'Редактировать вопрос',
   remove_question: 'Удалить вопрос',
@@ -59,5 +60,13 @@ export default {
   action: 'Действие',
   math: 'Математика',
   qazaq_tili: 'Казахский язык',
-  history: 'История Казахстана'
+  history: 'История Казахстана',
+  upload_question_file: 'Загрузить вопросы из файла',
+  select_file: 'Указать файл',
+  cancel: 'Отмена',
+  question_operation_warn: 'Что делать с новыми вопросами из файла',
+  no_touch_questions: 'Ничего не делать',
+  only_new_questions: 'Отсавить только новые вопоросы, старых удалить',
+  merge_with_new_questions: 'Объединить старые с новыми',
+  remove_confirm: 'Удалить этот вопрос ?'
 }

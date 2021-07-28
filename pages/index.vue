@@ -7,31 +7,24 @@
         class="white--text align-end"
         src="img/banner_main_2.jpg"
       />
-
       <v-card-subtitle class="pb-0">
         {{ $t('right_now') }}
       </v-card-subtitle>
-
       <v-card-text class="text--primary">
         <div>{{ $t('registration_not_necessary') }}</div>
         <div>{{ $t('full_test') }}</div>
       </v-card-text>
-
       <v-card-actions>
         <v-btn
-          color="orange"
-          text
-          :to="getLocalizedRoute('/choose_lessons')"
-        >
-          {{ $t('start_a_test') }}
-        </v-btn>
-
-      <!-- <v-btn
+        tile
         color="orange"
-        text
+        to="/choose_lessons"
       >
-        Explore
-      </v-btn> -->
+       {{ $t('start_a_test') }}
+       <v-icon>
+          mdi-arrow-right
+        </v-icon>
+      </v-btn>
       </v-card-actions>
     </v-card>
   </v-container>

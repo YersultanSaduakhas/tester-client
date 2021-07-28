@@ -15,7 +15,7 @@
       </v-list-item>
       <v-divider />
       <v-list>
-        <v-list-item :to="getLocalizedRoute('/')" router exactz>
+        <v-list-item to="/" router exactz>
           <v-list-item-action>
             <v-icon>mdi-apps</v-icon>
           </v-list-item-action>
@@ -25,7 +25,7 @@
         </v-list-item>
         <v-list-item
           v-if="!$auth.loggedIn || $auth.loggedIn === false"
-          :to="getLocalizedRoute('/login')"
+          to="/login"
           router
           exactz
         >
@@ -38,7 +38,7 @@
         </v-list-item>
         <v-list-item
           v-if="!$auth.loggedIn || $auth.loggedIn === false"
-          :to="getLocalizedRoute('/register')"
+          to="/register"
           router
           exactz
         >
@@ -51,7 +51,7 @@
         </v-list-item>
         <v-list-item
           v-if="isAdmin"
-          :to="getLocalizedRoute('/user/admin/lessons')"
+          to="/user/admin/lessons"
           router
           exactz
         >
@@ -63,21 +63,8 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item
-          v-if="isAdmin"
-          :to="getLocalizedRoute('/user/admin/questions')"
-          router
-          exactz
-        >
-          <v-list-item-action>
-            <v-icon>mdi-file-question</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="$t('questions_admin')" />
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item
           v-if="isAuthenticated"
-          :to="getLocalizedRoute('/profile')"
+          to="/profile"
           router
           exactz
         >
@@ -107,8 +94,8 @@
         bilim.kz
       </v-toolbar-title>
       <v-spacer />
-        <img class="mr-3" @click="switchLocalePath('kz')" src="img/flag_kazakhstan_24.png">
-        <img @click="switchLocalePath('ru')" src="img/flag_russia_24.png">
+      <img class="mr-3" src="img/flag_kazakhstan_24.png" @click="switchLocalePath('kz')">
+      <img src="img/flag_russia_24.png" @click="switchLocalePath('ru')">
       <!-- <v-btn icon>
         <v-icon>mdi-export</v-icon>
       </v-btn> -->
@@ -141,7 +128,7 @@ export default {
   computed: {
     ...mapGetters(['isAuthenticated', 'loggedInUser']),
     isAdmin () {
-      return this.$auth.state.loggedIn && this.$auth.state.loggedIn === true && this.$auth.user.is_admin === true
+      return this.$auth.loggedIn && this.$auth.loggedIn === true && this.$auth.user.is_admin === true
     }
   },
   mounted () {
@@ -160,7 +147,7 @@ export default {
     },
     async logout () {
       await this.$auth.logout()
-      this.$router.push({ path: this.getLocalizedRoute('/login') })
+      this.$router.push({ path: '/login' })
     },
     switchLocalePath (lang) {
       this.$root.context.app.i18n.setLocale(lang)

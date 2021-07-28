@@ -54,7 +54,7 @@ export default {
       try {
         this.$toast.show('Logging in...')
         await this.$auth.loginWith('cookie', { data: { email: this.email, password: this.password } })
-        this.$router.push(this.getLocalizedRoute('/profile'))
+        this.$router.push('/profile')
         this.$toast.success('Successfully authenticated')
       } catch (err) {
         console.log(err)
