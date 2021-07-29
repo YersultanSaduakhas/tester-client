@@ -15,7 +15,7 @@
       {{ $t('go_back') }}
     </v-btn>
     <v-row class="ml-5 mt-5 mb-5">
-      <v-form ref="questionForm" v-model="valid" lazy-validation>
+      <v-form ref="questionForm" v-model="valid" lazy-validation full-width style="width:100%;">
         <v-textarea
           v-model="currentQuestion.text"
           :rules="[rules.required]"
@@ -24,6 +24,7 @@
           required
           auto-grow
           filled
+          full-width
         />
         <v-textarea
           v-model="currentQuestion.option_1"
@@ -32,6 +33,7 @@
           maxlength="2000"
           required
           auto-grow
+          full-width
         />
         <v-textarea
           v-model="currentQuestion.option_2"
@@ -40,6 +42,7 @@
           maxlength="2000"
           required
           auto-grow
+          full-width
         />
         <v-textarea
           v-model="currentQuestion.option_3"
@@ -48,6 +51,7 @@
           maxlength="2000"
           required
           auto-grow
+          full-width
         />
         <v-textarea
           v-model="currentQuestion.option_4"
@@ -56,6 +60,7 @@
           maxlength="2000"
           required
           auto-grow
+          full-width
         />
         <v-textarea
           v-model="currentQuestion.option_5"
@@ -64,6 +69,7 @@
           maxlength="2000"
           required
           auto-grow
+          full-width
         />
         <v-select
           v-model="currentQuestion.answer"
@@ -78,6 +84,7 @@
           maxlength="2000"
           required
           auto-grow
+          full-width
         />
         <v-textarea
           v-model="currentQuestion.hint"
@@ -86,6 +93,7 @@
           maxlength="2000"
           required
           auto-grow
+          full-width
         />
         <v-btn
           class="mr-4"
