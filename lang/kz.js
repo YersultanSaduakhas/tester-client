@@ -68,6 +68,7 @@ export default {
   no_touch_questions: 'Ешнәрсе істеме',
   only_new_questions: 'Тек жаңа сұрақтарды қалдыр, ескілерін өшір',
   merge_with_new_questions: 'Жаңа сұрақтарды ескілерімен біріктір',
-  remove_confirm: 'Мына сұрақты өшірейін бе ?'
+  remove_confirm: 'Мына сұрақты өшірейін бе ?',
+  remove_lesson_confirm: 'Мына пәнді өшірейін бе ?'
 
 }

@@ -68,5 +68,6 @@ export default {
   no_touch_questions: 'Ничего не делать',
   only_new_questions: 'Отсавить только новые вопоросы, старых удалить',
   merge_with_new_questions: 'Объединить старые с новыми',
-  remove_confirm: 'Удалить этот вопрос ?'
+  remove_confirm: 'Удалить этот вопрос ?',
+  remove_lesson_confirm: 'Удалить этот предмет ?'
 }
