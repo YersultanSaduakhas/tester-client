@@ -150,27 +150,11 @@
           <td>{{ item.id }}</td>
           <td>
             <span>{{ item.text }}</span>
-            <br>
-            <span :dark="item.answer===1">
-              1) {{ item.option_1 }}
-            </span>
-            <br>
-            <span :dark="item.answer===2">
-              2) {{ item.option_2 }}
-            </span>
-            <br>
-            <span :dark="item.answer===3">
-              3) {{ item.option_3 }}
-            </span>
-            <br>
-            <span :dark="item.answer===4">
-              4) {{ item.option_4 }}
-            </span>
-            <br>
-            <span :dark="item.answer===5">
-              5) {{ item.option_5 }}
-            </span>
-            <br>
+            <ul>
+              <li v-for="(opt_, ind) in item.options" :key="ind" :class="{ is_right: opt_.is_right === 1 }">
+                {{ (ind+1) + ') ' + opt_.text }}
+              </li>
+            </ul>
             <span>{{ $t('reason') }} : {{ item.reason }}</span>
             <br>
             <span>{{ $t('hint') }} : {{ item.hint }}</span>
@@ -423,6 +407,10 @@ export default {
 }
 </script>
 <style scoped>
+.is_right{
+  background-color: #20e54b;
+  color: white;
+}
 .hide-input {
     display: none;
 }

@@ -72,6 +72,8 @@ export default {
   only_new_questions: 'Тек жаңа сұрақтарды қалдыр, ескілерін өшір',
   merge_with_new_questions: 'Жаңа сұрақтарды ескілерімен біріктір',
   remove_confirm: 'Мына сұрақты өшірейін бе ?',
-  remove_lesson_confirm: 'Мына пәнді өшірейін бе ?'
-
+  remove_option_confirm: 'Мына нұсқаны өшірейін бе ?',
+  remove_lesson_confirm: 'Мына пәнді өшірейін бе ?',
+  remove: 'Өшіру',
+  add_option: 'Нұсқа қосу'
 }
