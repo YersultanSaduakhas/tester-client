@@ -16,37 +16,42 @@
     </v-btn>
     <v-row class="ml-5 mt-5 mb-5">
       <v-form ref="lessonForm" v-model="valid" lazy-validation>
+        <v-select
+          v-model="currentLesson.l_type"
+          :items="lessonTypes"
+          :item-text="'title'"
+          :item-value="'key'"
+          :label="$t('lesson_type')"
+          required
+          @change="selectLessonType"
+        />
         <v-text-field
           v-model="currentLesson.name"
           :rules="[rules.required]"
           :label="$t('name')"
           maxlength="50"
           required
+          :disabled="currentLesson.l_type!='profile'"
         />
         <v-select
           v-model="currentLesson.language"
           :items="langs"
-          :item-text="$t()"
           :label="$t('language')"
           required
         />
-        <v-select
-          v-model="currentLesson.l_type"
-          :items="lessonTypes"
-          :item-text="'title'"
-          :item-value="'key'"
-          :label="$t('required_lesson_type')"
-          required
-        />
-        <v-text-field
-          v-model="currentLesson.question_count"
-          :label="$t('total_question_count')"
-          disabled
-        />
-        <v-text-field
-          v-model="currentLesson.question_count_to_test"
-          :label="$t('quiz_question_count')"
-        />
+        <v-card v-if="currentLesson.l_type==='profile'">
+          <v-spacer />
+          <v-combobox
+            v-model="currentLesson.cross_lessons"
+            :items="profileLessons"
+            :item-text="'title'"
+            :label="$t('second_additional_lessons')"
+            multiple
+            outlined
+            dense
+          />
+          <v-spacer />
+        </v-card>
         <v-container v-if="showQuestionOperation">
           <p>{{ $t('question_operation_warn') }}</p>
           <v-radio-group
@@ -253,6 +258,8 @@ export default {
       showQuestionOperation: false,
       file: '',
       filename: null,
+      allLessons: [],
+      profileLessons: [],
       currentQuestion: {
         id: null,
         text: null,
@@ -265,7 +272,8 @@ export default {
         name: '',
         question_count: 0,
         question_count_to_test: 0,
-        q_operation: 'no_touch'
+        q_operation: 'no_touch',
+        cross_lessons: []
       },
       questions: [],
       search: '',
@@ -281,7 +289,7 @@ export default {
       lessons: [],
       langs: ['kz', 'ru'],
       lessonTypes: [
-        { key: null, title: this.$t('additional_lessons') },
+        { key: 'profile', title: this.$t('additional_lessons') },
         { key: 'math', title: this.$t('math') },
         { key: 'qazaq_tili', title: this.$t('qazaq_tili') },
         { key: 'history', title: this.$t('history') }
@@ -307,11 +315,35 @@ export default {
     if (this.$route.query.mode === 'edit') {
       this.loadLesson(this.$route.query.id, 1, 10)
     }
+    this.loadAllLesson()
   },
   methods: {
+    async loadAllLesson () {
+      const res = await axios.get('/api/lesson')
+      if (this.currentLesson.id) {
+        const currentLessonId = this.currentLesson.id
+        res.data = res.data.filter(function (e) {
+          return e.id !== currentLessonId
+        })
+      }
+      this.allLessons = res.data
+      this.allLessons.forEach((_) => {
+        _.title = _.name + ' (' + _.language + ')'
+        delete _.pivot
+      })
+      this.profileLessons = this.allLessons.filter(function (e) {
+        return !['math', 'qazaq_tili', 'history'].includes(e.l_type)
+      })
+    },
     async loadLesson (id) {
       const res = await axios.get('/api/lesson/' + id)
       this.currentLesson = res.data
+      if (this.currentLesson.cross_lessons && this.currentLesson.cross_lessons.length) {
+        this.currentLesson.cross_lessons.forEach((_) => {
+          _.title = _.name + ' (' + _.language + ')'
+          delete _.pivot
+        })
+      }
     },
     async loadQuestions (lessonId, page, size) {
       this.loading = true
@@ -331,8 +363,12 @@ export default {
     handleClick (row) {
       this.currentQuestion = row
     },
+    selectLessonType (item) {
+      if (item !== 'profile') {
+        this.currentLesson.name = this.$t(item)
+      }
+    },
     async submit () {
-      debugger
       if (this.$refs.lessonForm.validate()) {
         if (this.$route.query.mode === 'new') {
           this.currentLesson.q_operation = 'new'

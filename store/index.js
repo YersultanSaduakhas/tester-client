@@ -6,3 +6,14 @@ export const getters = {
     return state.auth.user
   }
 }
+
+export const state = () => ({
+  currentQuiz: {
+  }
+})
+
+export const mutations = {
+  setCurrentQuiz (state, quiz) {
+    state.currentQuiz = quiz
+  }
+}
