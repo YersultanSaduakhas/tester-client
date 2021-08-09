@@ -167,6 +167,22 @@ export default {
     },
     async submit () {
       if (this.$refs.questionForm.validate()) {
+        if (!this.currentQuestion.options || this.currentQuestion.options.length < 5) {
+          this.$toast.error(this.$t('minimum_option_count_5_warn'))
+          return
+        }
+        const answers = []
+        for (let i = 0; i < this.currentQuestion.options.length; i++) {
+          if (this.currentQuestion.options[i].is_right === true || this.currentQuestion.options[i].is_right === 1) {
+            answers.push(i + 1)
+          }
+        }
+        if (answers.length === 0) {
+          this.$toast.error(this.$t('minimum_answer_count_1_warn'))
+          return
+        }
+        this.currentQuestion.answers = answers.join(',')
+        this.currentQuestion.right_answer_count = answers.length
         this.currentQuestion.lesson_id = this.$route.query.lesson_id ? this.$route.query.lesson_id : -1
         if (this.$route.query.mode === 'new') {
           this.$toast.show('saving new...')
@@ -196,7 +212,7 @@ export default {
         this.currentQuestion.options = []
       }
       this.currentQuestion.options.push({
-        is_right: 0,
+        is_right: false,
         question_id: this.currentQuestion.id,
         text: ''
       })

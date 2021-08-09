@@ -79,6 +79,7 @@
         dense
         outlined
         type="error"
+        class="ml-5 mr-5"
       >
         {{ $t('additional_lessons_not_choosen_error') }}
       </v-alert>
@@ -87,7 +88,7 @@
         tile
         color="primary"
         :disabled="!quizRules.profile_lesson_1||!quizRules.profile_lesson_2"
-        to="do_test"
+        @click="startTest()"
       >
         {{ $t('start_a_test') }}
         <v-icon left>
@@ -133,6 +134,9 @@ export default {
   }),
   beforeMount () {
     this.loadLessons(this.quizRules.subjectLanguage)
+    if (this.$store.state.setCurrentQuizRules) {
+      this.$router.push('/do_test')
+    }
   },
   methods: {
     async loadLessons (lang) {
@@ -154,6 +158,15 @@ export default {
       this.additionalSubjects2 = this.additionalSubjects.filter(function (e) {
         return e.id === profileLesson1Id
       })[0].cross_lessons
+    },
+    startTest () {
+      axios.get(`/api/open/data/quiz_questions?language=${this.quizRules.subjectLanguage}&profile_lesson_1_id=${this.quizRules.profile_lesson_1}&profile_lesson_2_id=${this.quizRules.profile_lesson_2}`)
+        .then((response) => {
+          this.$store.commit('setCurrentQuizRules', response.data)
+          this.$router.push('/do_test')
+        }).catch((error) => {
+          this.$toast.error(error + ' ,Қате, кейін көріңіз')
+        })
     }
   }
 }

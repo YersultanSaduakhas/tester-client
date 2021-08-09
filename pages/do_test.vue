@@ -11,37 +11,72 @@
       justify="center"
     >
       <v-progress-linear
-        v-model="knowledge"
+        v-model="answeredQuestionPercentage"
         class="v-progress-linear"
         height="25"
         color="blue-grey"
       >
-        <strong>{{ Math.ceil(knowledge) }}%</strong>
+        <strong>{{ $store.state.answeredQuestions.length }}</strong>
       </v-progress-linear>
     </v-row>
     <v-row
       align="center"
       justify="center"
-      class="mb-6"
+      class=""
     >
-      <v-card-subtitle>{{ currentLesson.title }}</v-card-subtitle>
+      <v-card-subtitle>
+        <v-list subheader two-line>
+          <v-list-item>
+            <v-list-item-content>
+              <v-select
+                v-model="currentLessonId"
+                :items="lessons"
+                item-text="name"
+                item-value="lesson_id"
+                :label="$t('lessons')"
+                @change="onChangeLesson"
+              />
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-content>
+              <v-select
+                v-model="currentQuestionIndex"
+                :items="questionIndexes"
+                :label="$t('questions')"
+                @change="onChangeQuestion"
+              />
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-card-subtitle>
     </v-row>
     <v-card>
-      <p class="ml-1">
-        {{ currentLesson.currentQuestion.id }}) Lorem ipsum dolor sit amet, consectetLorem ipsum dolor sit amet, consectet
+      <p v-if="currentQuestion" class="ml-1">
+        {{ currentQuestion.text }}
       </p>
       <v-divider />
       <v-radio-group
-        v-model="answerChoosen"
+        v-if="currentQuestion&&(currentQuestion.right_answer_count===1)"
         class="ml-1"
       >
         <v-radio
-          v-for="n in 5"
-          :key="n"
-          :label="`Radio ${n}`"
-          :value="n"
+          v-for="option in currentQuestion.options"
+          :key="option.id"
+          :label="option.text"
+          :value="option.id"
         />
       </v-radio-group>
+      <template v-if="currentQuestion&&currentQuestion.right_answer_count>1">
+        <v-checkbox
+          v-for="(option_, ind_) in currentQuestion.options"
+          :key="'cbx_'+ind_"
+          multiple
+          :hide-details="ind_ !== currentQuestion.options.length - 1"
+          :value="ind_+1"
+          :label="option_.text"
+        />
+      </template>
     </v-card>
     <v-row
       align="center"
@@ -52,35 +87,119 @@
         left
         rounded
         class="mr-2"
+        @click="goToQuestion(-1)"
       >
-        Artqa
+        {{ $t('back') }}
       </v-btn>
-      <v-btn v-if="answerChoosen === -1" right rounded>
-        Otkizu
+      <v-btn
+        right
+        rounded
+        @click="goToQuestion(1)"
+      >
+        {{ $t('next') }}
       </v-btn>
-      <v-btn v-if="answerChoosen>-1" right rounded>
-        Kelesi
+    </v-row>
+    <v-row
+      align="center"
+      justify="center"
+      class="mt-10 mb-5"
+    >
+      <v-btn color="primary">
+        {{ $t('end_a_test') }}
       </v-btn>
     </v-row>
   </v-card>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   auth: false,
   data: () => ({
-    knowledge: 35,
-    answerChoosen: -1,
-    currentLessonIndex: 0,
-    currentLesson: {
-      title: 'Matematika',
-      currentQuestionId: 1,
-      allQuestionCount: 40,
-      currentQuestion: {
-        id: 1
+    lessons: [],
+    questionIndexes: [],
+    currentQuestion: null,
+    currentLessonId: null,
+    currentQuestionIndex: null
+  }),
+  computed: {
+    answeredQuestionPercentage () {
+      return this.$store.state.answeredQuestions.length * 100 / 120
+    }
+  },
+  mounted () {
+    // init lessons select-dropdown
+    if (this.$store.state.currentQuizRules) {
+      this.lessons = this.$store.state.currentQuizRules
+    } else {
+      this.$router.push('/choose_lessons')
+    }
+    // init lessons select-dropdown
+    this.currentLessonId = localStorage.current_lesson_id ? parseInt(localStorage.current_lesson_id) : this.$store.state.currentQuizRules[0].lesson_id
+    this.currentQuestionIndex = localStorage.current_question_index ? parseInt(localStorage.current_question_index) : 1
+    this.countQuestionIndexes()
+    this.loadCurrentQuestion(this.currentLessonId, this.currentQuestionIndex - 1)
+  },
+  methods: {
+    onChangeLesson (lessonId) {
+      this.countQuestionIndexes()
+      this.currentQuestionIndex = 1
+      this.updateLocalStorageCurrentData()
+      this.loadCurrentQuestion(this.currentLessonId, this.currentQuestionIndex - 1)
+    },
+    onChangeQuestion (questionId) {
+      this.updateLocalStorageCurrentData()
+      this.loadCurrentQuestion(this.currentLessonId, this.currentQuestionIndex - 1)
+    },
+    async loadCurrentQuestion (lessonId, questionIndex) {
+      const currentLesson_ = this.$store.state.currentQuizRules.filter((e) => {
+        return e.lesson_id === lessonId
+      })[0]
+      let currentQuestionId_ = -1
+      if (currentLesson_.type === 'profile' && questionIndex > 24) {
+        currentQuestionId_ = currentLesson_.no_5_optioned_question_ids[questionIndex - 25]
+      } else {
+        currentQuestionId_ = currentLesson_.question_ids[questionIndex]
+      }
+      const res = await axios.get(`/api/open/data/questions/${currentQuestionId_}`)
+      this.currentQuestion = res.data
+    },
+    updateLocalStorageCurrentData () {
+      localStorage.setItem('current_lesson_id', this.currentLessonId)
+      localStorage.setItem('current_question_index', this.currentQuestionIndex)
+    },
+    goToQuestion (ind) {
+      const tmpIndex = this.currentQuestionIndex + ind
+      const lessonIndex = this.lessons.map(function (e) { return e.lesson_id }).indexOf(this.currentLessonId)
+      if (tmpIndex === 0) {
+        // backwards
+
+        const currentLessonIndex = lessonIndex - 1 === -1 ? 4 : lessonIndex - 1
+        this.currentLessonId = this.lessons[currentLessonIndex].lesson_id
+        this.currentQuestionIndex = this.lessons[currentLessonIndex].type === 'profile' ? 34 : this.lessons[currentLessonIndex].question_count
+      } else if (tmpIndex > this.questionIndexes.length) {
+        // forwards
+        this.currentQuestionIndex = 1
+        const currentLessonIndex = lessonIndex + 1 === 5 ? 0 : lessonIndex + 1
+        this.currentLessonId = this.lessons[currentLessonIndex].lesson_id
+      } else {
+        this.currentQuestionIndex = tmpIndex
+      }
+      this.countQuestionIndexes()
+      this.updateLocalStorageCurrentData()
+      this.loadCurrentQuestion(this.currentLessonId, this.currentQuestionIndex - 1)
+    },
+    countQuestionIndexes () {
+      this.questionIndexes = []
+      const currentLesson = this.lessons.filter((e) => {
+        return e.lesson_id === this.currentLessonId
+      })[0]
+      const questionCount = currentLesson.type === 'profile' ? 35 : currentLesson.question_count
+      for (let i = 1; i <= questionCount; i++) {
+        this.questionIndexes.push(i)
       }
     }
-  })
+  }
 }
 </script>
 <style>

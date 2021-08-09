@@ -7,7 +7,7 @@
       tile
       color="success"
       class="ml-5"
-      to="./"
+      @click="cancel()"
     >
       <v-icon>
         mdi-arrow-left
@@ -208,9 +208,7 @@
         <v-card-text>
           {{ currentQuestion.id + ') '+ currentQuestion.text }}
         </v-card-text>
-
         <v-divider />
-
         <v-card-actions>
           <v-spacer />
           <v-btn
@@ -290,13 +288,21 @@ export default {
     options: {
       handler () {
         const { page, itemsPerPage } = this.options
-        this.loadQuestions(this.$route.query.id, page + 1, itemsPerPage)
-      }
+        this.loadQuestions(this.$route.query.id, page === 0 ? page + 1 : page, itemsPerPage)
+      },
+      deep: true
     },
-    deep: true
+    currentLesson: {
+      handler () {
+        localStorage.setItem('currentEditingLesson', JSON.stringify(this.currentLesson))
+      },
+      deep: true
+    }
   },
   mounted () {
-    if (this.$route.query.mode === 'edit') {
+    if (localStorage.currentEditingLesson) {
+      this.currentLesson = JSON.parse(localStorage.currentEditingLesson)
+    } else if (this.$route.query.mode === 'edit') {
       this.loadLesson(this.$route.query.id, 1, 10)
     }
     this.loadAllLesson()
@@ -332,12 +338,12 @@ export default {
     async loadQuestions (lessonId, page, size) {
       this.loading = true
       let query = ''
-      if (lessonId) {
-        query = '?lesson_id=' + lessonId
-      } else {
+      if (this.showQuestionOperation === true) {
         query = '?is_tmp=true'
+      } else if (lessonId) {
+        query = '?lesson_id=' + lessonId
       }
-      query += '&page=' + page + '&size' + size
+      query += '&page=' + page + '&size=' + size
       const resQuestions = await axios.get('/api/question' + query)
       this.questions = resQuestions.data.data
       this.totalQuestions = resQuestions.data.total
@@ -369,9 +375,11 @@ export default {
       }
     },
     async cancel () {
+      localStorage.setItem('currentEditingLesson', '')
       if (this.showQuestionOperation === true) {
-        await axios.delet('/api/lesson/-1')
+        await axios.delete('/api/lesson/-1')
       }
+      this.$router.back()
     },
     selectFile (file) {
       this.file = file

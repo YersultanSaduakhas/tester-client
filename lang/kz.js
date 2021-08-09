@@ -17,6 +17,7 @@ export default {
   start_a_test: 'Сынақты бастау',
   test_has_been_started: 'Сынақ басталды',
   go_back: 'Артқа қайту',
+  back: 'Артқа',
   pass: 'Өткізу',
   next: 'Келесі',
   end_a_test: 'Сынақты бітіру',
@@ -75,5 +76,7 @@ export default {
   remove_option_confirm: 'Мына нұсқаны өшірейін бе ?',
   remove_lesson_confirm: 'Мына пәнді өшірейін бе ?',
   remove: 'Өшіру',
-  add_option: 'Нұсқа қосу'
+  add_option: 'Нұсқа қосу',
+  minimum_option_count_5_warn: 'Кем дегенде 5 нұсқа болуы керек',
+  minimum_answer_count_1_warn: 'Кем дегенде 1 дұрыс жауап болуы керек'
 }

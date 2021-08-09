@@ -75,5 +75,7 @@ export default {
   remove_option_confirm: 'Удалить этот вариант ?',
   remove: 'Удалить',
   remove_lesson_confirm: 'Удалить этот предмет ?',
-  add_option: 'Добавить вариант'
+  add_option: 'Добавить вариант',
+  minimum_option_count_5_warn: 'Минимум 5 вариантов ответа должен быть',
+  minimum_answer_count_1_warn: 'Минимум 1 ответ должен быть'
 }
