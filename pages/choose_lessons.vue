@@ -162,6 +162,8 @@ export default {
     startTest () {
       axios.get(`/api/open/data/quiz_questions?language=${this.quizRules.subjectLanguage}&profile_lesson_1_id=${this.quizRules.profile_lesson_1}&profile_lesson_2_id=${this.quizRules.profile_lesson_2}`)
         .then((response) => {
+          // finishing all startedt tests before starting new
+          this.$store.commit('endTest', response.data)
           this.$store.commit('setCurrentQuizRules', response.data)
           this.$router.push('/do_test')
         }).catch((error) => {

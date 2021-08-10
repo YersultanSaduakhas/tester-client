@@ -8,31 +8,32 @@ export const getters = {
 }
 
 export const state = () => ({
-  currentQuizRules: {
-  },
-  currentQuizQuestion: {
-  },
+  currentQuizRules: [],
+  testEnded: true,
   answeredQuestions: []
 })
 
 export const mutations = {
   setCurrentQuizRules (state, quizRules) {
+    state.testEnded = false
     state.currentQuizRules = quizRules
   },
-  setCurrentQuizQuestion (state, currentQuizQuestion) {
-    state.currentQuizQuestion = currentQuizQuestion
-  },
-  setQuestionAnswer (state, question) {
+  setAnsweredQuestion (state, question) {
     const questionId = question.id
-    const exists_ = state.answeredQuestions.filter(function (e) {
-      return e.id === questionId
-    })
-    if (exists_ && exists_.length > 0) {
-      state.answeredQuestions.filter(function (e) {
-        return e.id === questionId
-      })[0].answer = question.answer
-    } else {
+    const questionIndex = state.answeredQuestions.map(function (e) { return e.id }).indexOf(questionId)
+    if (questionIndex > -1) {
+      if (question.choosen_answers.length > 0) {
+        state.answeredQuestions[questionIndex].choosen_answers = question.choosen_answers
+      } else {
+        state.answeredQuestions.splice(questionIndex, 1)
+      }
+    } else if (question.choosen_answers.length > 0) {
       state.answeredQuestions.push(question)
     }
+  },
+  endTest (state) {
+    state.testEnded = true
+    state.answeredQuestions = []
+    state.currentQuizRules = []
   }
 }

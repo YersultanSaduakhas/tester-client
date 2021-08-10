@@ -16,6 +16,7 @@ export default {
   take_a_test: 'Сынақ тапсыру',
   start_a_test: 'Сынақты бастау',
   test_has_been_started: 'Сынақ басталды',
+  test_has_been_ended: 'Сынақ аяқталды',
   go_back: 'Артқа қайту',
   back: 'Артқа',
   pass: 'Өткізу',
@@ -78,5 +79,10 @@ export default {
   remove: 'Өшіру',
   add_option: 'Нұсқа қосу',
   minimum_option_count_5_warn: 'Кем дегенде 5 нұсқа болуы керек',
-  minimum_answer_count_1_warn: 'Кем дегенде 1 дұрыс жауап болуы керек'
+  minimum_answer_count_1_warn: 'Кем дегенде 1 дұрыс жауап болуы керек',
+  max_answer_count_3_warn: 'Көп дегенде 3 дұрыс жауап болуы керек',
+  end_test_confirm: 'Тестті аяқтайсыз ба ?',
+  yes: 'Ия',
+  no: 'Жоқ',
+  all: 'Барлығы'
 }

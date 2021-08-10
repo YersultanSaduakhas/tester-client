@@ -16,6 +16,7 @@ export default {
   take_a_test: 'Пройти тест',
   start_a_test: 'Начать тест',
   test_has_been_started: 'Тест начался',
+  test_has_been_ended: 'Тест закончался',
   go_back: 'Назад',
   pass: 'Пропустить',
   next: 'Следующий',
@@ -77,5 +78,10 @@ export default {
   remove_lesson_confirm: 'Удалить этот предмет ?',
   add_option: 'Добавить вариант',
   minimum_option_count_5_warn: 'Минимум 5 вариантов ответа должен быть',
-  minimum_answer_count_1_warn: 'Минимум 1 ответ должен быть'
+  minimum_answer_count_1_warn: 'Минимум 1 ответ должен быть',
+  max_answer_count_3_warn: 'Максимум 3 ответа должна быть',
+  end_test_confirm: 'Завершить тест ?',
+  yes: 'Да',
+  no: 'Нет',
+  all: 'Итог'
 }
