@@ -49,7 +49,7 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     ['nuxt-i18n', {
-       strategy: 'no_prefix',
+      strategy: 'no_prefix',
       locales: [
         {
           name: 'kz',
@@ -141,7 +141,7 @@ export default {
         // },
         user: {
           property: false,
-          autoFetch: true
+          autoFetch: false
         },
         endpoints: {
           login: {
