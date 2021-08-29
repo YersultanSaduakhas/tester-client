@@ -1,19 +1,23 @@
 export const getters = {
   isAuthenticated (state) {
-    return state.auth.loggedIn
+    return !!state.user
   },
   loggedInUser (state) {
-    return state.auth.user
+    return state.user
   }
 }
 
 export const state = () => ({
+  user: null,
   currentQuizRules: [],
   testEnded: true,
   answeredQuestions: []
 })
 
 export const mutations = {
+  setUser (state, user) {
+    state.user = user
+  },
   setCurrentQuizRules (state, quizRules) {
     state.testEnded = false
     state.currentQuizRules = quizRules
