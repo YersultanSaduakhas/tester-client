@@ -115,6 +115,7 @@
         <v-divider />
         <v-radio-group
           v-if="currentQuestion&&(currentQuestion.right_answer_count===1)"
+          v-model="singleAnswerValue"
           class="ml-1"
           @change="onChooseOne"
         >
@@ -205,6 +206,7 @@ import axios from 'axios'
 export default {
   auth: false,
   data: () => ({
+    singleAnswerValue: null,
     lessons: [],
     showEndTestDialog: false,
     questionIndexes: [],
@@ -246,6 +248,7 @@ export default {
     },
     async loadCurrentQuestion (lessonId, questionIndex) {
       this.multipleCheckValues = []
+      this.singleAnswerValue = null
       this.currentQuestion = null
       const currentLesson_ = this.$store.state.currentQuizRules.filter((e) => {
         return e.lesson_id === lessonId
@@ -255,6 +258,15 @@ export default {
         currentQuestionId_ = currentLesson_.no_5_optioned_question_ids[questionIndex - 25]
       } else {
         currentQuestionId_ = currentLesson_.question_ids[questionIndex]
+      }
+
+      const anseweredQuestion = this.getQuestionIfAnswered(currentQuestionId_)
+      if (anseweredQuestion) {
+        debugger
+        this.multipleCheckValues = anseweredQuestion.choosen_answers
+        if (anseweredQuestion.choosen_answers.length === 1) {
+          this.singleAnswerValue = anseweredQuestion.choosen_answers[0]
+        }
       }
       const res = await axios.get(`/api/open/data/questions/${currentQuestionId_}`)
       this.currentQuestion = res.data
@@ -377,6 +389,13 @@ export default {
       this.updateLocalStorageCurrentData()
       this.$store.commit('endTest')
       this.$nuxt.$loading.finish()
+    },
+    getQuestionIfAnswered (questionId) {
+      const questionIndex = this.$store.state.answeredQuestions.map(function (e) { return e.id }).indexOf(questionId)
+      if (questionIndex > -1) {
+        return this.$store.state.answeredQuestions[questionIndex]
+      }
+      return null
     }
   }
 }
