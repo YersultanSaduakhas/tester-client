@@ -54,6 +54,9 @@ export default {
       try {
         this.$toast.show('Logging in...')
         await this.$auth.loginWith('cookie', { data: { email: this.email, password: this.password } })
+        const currentUser = await this.$auth.fetchUser()
+
+        this.$store.commit('setUser', currentUser.data)
         this.$router.push('/profile')
         this.$toast.success('Successfully authenticated')
       } catch (err) {

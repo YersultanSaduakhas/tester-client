@@ -335,7 +335,7 @@ export default {
         })
       }
     },
-    async loadQuestions (lessonId, page, size) {
+    loadQuestions (lessonId, page, size) {
       this.loading = true
       let query = ''
       if (this.showQuestionOperation === true) {
@@ -344,11 +344,15 @@ export default {
         query = '?lesson_id=' + lessonId
       }
       query += '&page=' + page + '&size=' + size
-      const resQuestions = await axios.get('/api/question' + query)
-      this.questions = resQuestions.data.data
-      this.totalQuestions = resQuestions.data.total
-      this.numberOfPages = resQuestions.data.last_page
-      this.loading = false
+      axios.get('/api/question' + query).then((resQuestions) => {
+        this.questions = resQuestions.data.data
+        this.totalQuestions = resQuestions.data.total
+        this.numberOfPages = resQuestions.data.last_page
+      }).catch(() => {
+        this.$toast.error('Не удалось загрузить данные с сервера')
+      }).finally(() => {
+        this.loading = false
+      })
     },
     handleClick (row) {
       this.currentQuestion = row
