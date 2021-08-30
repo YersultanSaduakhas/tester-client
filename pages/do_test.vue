@@ -222,7 +222,7 @@ export default {
   },
   mounted () {
     // init lessons select-dropdown
-    if (this.$store.state.currentQuizRules) {
+    if (this.$store.state.currentQuizRules && this.$store.state.currentQuizRules.length) {
       this.lessons = this.$store.state.currentQuizRules
     } else {
       this.$router.push('/choose_lessons')
