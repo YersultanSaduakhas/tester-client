@@ -84,5 +84,7 @@ export default {
   end_test_confirm: 'Тестті аяқтайсыз ба ?',
   yes: 'Ия',
   no: 'Жоқ',
-  all: 'Барлығы'
+  all: 'Барлығы',
+  video_link: 'Видеоға сілтеме',
+  analize_mistakes: 'Сұрақтарды талдау'
 }

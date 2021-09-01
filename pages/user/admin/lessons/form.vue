@@ -155,9 +155,8 @@
                 {{ (ind+1) + ') ' + opt_.text }}
               </li>
             </ul>
-            <span>{{ $t('reason') }} : {{ item.reason }}</span>
             <br>
-            <span>{{ $t('hint') }} : {{ item.hint }}</span>
+            <span>{{ $t('video_link') }} : {{ item.hint }}</span>
           </td>
           <td>
             <v-tooltip left>

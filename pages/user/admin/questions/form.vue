@@ -63,18 +63,9 @@
           {{ $t('add_option') }}
         </v-btn>
         <v-textarea
-          v-model="currentQuestion.reason"
-          :rules="[rules.required]"
-          :label="$t('reason')"
-          maxlength="2000"
-          required
-          auto-grow
-          full-width
-        />
-        <v-textarea
           v-model="currentQuestion.hint"
-          :rules="[rules.required]"
-          :label="$t('hint')"
+          :rules="[rules.isUrl]"
+          :label="$t('video_link')"
           maxlength="2000"
           required
           auto-grow
@@ -138,7 +129,7 @@ export default {
         text: null,
         options: [],
         answer: null,
-        reason: null,
+        reason: 'reason_text',
         hint: null,
         lesson_id: -1,
         tmp: 1
@@ -146,6 +137,11 @@ export default {
       valid: false,
       answers: [1, 2, 3, 4, 5],
       rules: {
+        isUrl: (value) => {
+          const expression = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig
+          const regex = new RegExp(expression)
+          return !!value && !!value.match(regex)
+        },
         required: value => !!value || '*.*',
         min: v => (v && v.length >= 8) || 'Min 8 characters'
       }
@@ -184,6 +180,7 @@ export default {
         this.currentQuestion.answers = answers.join(',')
         this.currentQuestion.right_answer_count = answers.length
         this.currentQuestion.lesson_id = this.$route.query.lesson_id ? this.$route.query.lesson_id : -1
+        this.currentQuestion.reason = 'reason_text'
         if (this.$route.query.mode === 'new') {
           this.$toast.show('saving new...')
           await axios.post('/api/question', this.currentQuestion)

@@ -8,6 +8,7 @@
         <v-card-title>{{ $t('test_has_been_ended') }}</v-card-title>
       </v-row>
       <v-row
+        v-if="!showHints"
         align="center"
         justify="center"
         class="mb-4"
@@ -21,8 +22,18 @@
             <td>{{ lesson_.score }}/{{ lesson_.type==='profile'?35:lesson_.question_count }}</td>
           </tr>
         </table>
+        <v-btn
+          left
+          rounded
+          class="mr-2"
+          @click="showHints=true"
+        >
+          {{ $t('analize_mistakes') }}
+        </v-btn>
       </v-row>
+
       <v-row
+        v-if="showHints"
         align="center"
         justify="center"
         class="mb-4"
@@ -42,9 +53,8 @@
                     </li>
                   </template>
                 </ul>
-                <span>{{ $t('reason') }} : {{ questionResult.reason }}</span>
                 <br>
-                <span>{{ $t('hint') }} : {{ questionResult.hint }}</span>
+                <span>{{ $t('video_link') }} : {{ questionResult.hint }}</span>
               </td>
             </tr>
           </template>
@@ -206,6 +216,7 @@ import axios from 'axios'
 export default {
   auth: false,
   data: () => ({
+    showHints: false,
     singleAnswerValue: null,
     lessons: [],
     showEndTestDialog: false,

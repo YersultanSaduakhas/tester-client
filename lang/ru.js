@@ -83,5 +83,7 @@ export default {
   end_test_confirm: 'Завершить тест ?',
   yes: 'Да',
   no: 'Нет',
-  all: 'Итог'
+  all: 'Итог',
+  video_link: 'Ссылка на видео',
+  analize_mistakes: 'Разбор ответов'
 }
